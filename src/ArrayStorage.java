@@ -3,7 +3,11 @@
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
-    public int size;
+    private int size;
+
+    int getSize () {
+        return size;
+    }
 
     void clear() {
         for (int i = 0; i < size(); i++) {
