@@ -21,12 +21,18 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
+        int counter = 0;
         if (size == 0) {
-            System.out.println("Sorry, there is no such resume!");
+            System.out.println("Sorry, it's empty here!");
         } else for (int i = 0; i < size; i++) {
             if (resume.getUuid().equals(storage[i].toString())) {
                 storage[i] = resume;
                 break;
+            } else if (size > i) {
+                counter++;
+                if (size == counter) {
+                    System.out.println("Sorry, what we are looking for is not here!");
+                }
             }
         }
     }
@@ -37,7 +43,7 @@ public class ArrayStorage {
                 return storage[i];
             }
         }
-        return new Resume("Sorry, I can't find it, check the correctness of the input");
+        return new Resume("Sorry, he's not here!");
     }
 
     public void delete(String uuid) {
