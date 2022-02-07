@@ -5,7 +5,7 @@ import com.urise.webapp.model.Resume;
 import java.util.Arrays;
 
 public class ArrayStorage {
-    private final Resume[] storage = new Resume[3];
+    private final Resume[] storage = new Resume[10000];
     private int size = 0;
 
     public void clear() {
@@ -14,26 +14,20 @@ public class ArrayStorage {
     }
 
     public void save(Resume resume) {
-        boolean rb = false;
         if (size == 0) {
-            storage[size] = resume;
-            size++;
+            writeToCell(resume);
             return;
-        } else if (size >= storage.length) {
+        }
+        if (size >= storage.length) {
             System.out.println("Sorry, array is full");
             return;
-        } else for (int i = 0; i < size; i++) {
-            rb = storage[i].getUuid().equals(resume.getUuid());
         }
-        if (rb) {
+        if (findResume(resume)) {
             System.out.printf("Sorry, %s already available \n", resume);
         } else {
-            storage[size] = resume;
-            size++;
+            writeToCell(resume);
         }
-
     }
-
 
     public void update(Resume resume) {
         int counter = 0;
@@ -82,5 +76,18 @@ public class ArrayStorage {
 
     public int getSize() {
         return size;
+    }
+
+    private boolean findResume(Resume resume) {
+        boolean rb = false;
+        for (int i = 0; i < size; i++) {
+            rb = storage[i].getUuid().equals(resume.getUuid());
+        }
+        return rb;
+    }
+
+    private void writeToCell(Resume resume) {
+        storage[size] = resume;
+        size++;
     }
 }

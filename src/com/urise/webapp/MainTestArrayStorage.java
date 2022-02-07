@@ -32,12 +32,11 @@ public class MainTestArrayStorage {
         ARRAY_STORAGE.update(r1);
         printAll();
         ARRAY_STORAGE.clear();
-        ARRAY_STORAGE.delete(r1.getUuid());
-        ARRAY_STORAGE.update(r1);
         printAll();
 
-
         System.out.println("Size: " + ARRAY_STORAGE.getSize());
+        ARRAY_STORAGE.delete(r1.getUuid());
+        ARRAY_STORAGE.update(r1);
     }
 
     static void printAll() {
