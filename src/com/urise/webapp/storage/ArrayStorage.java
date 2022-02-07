@@ -14,58 +14,42 @@ public class ArrayStorage {
     }
 
     public void save(Resume resume) {
-        if (size == 0) {
-            writeToCell(resume);
-            return;
-        }
         if (size >= storage.length) {
             System.out.println("Sorry, array is full");
             return;
         }
-        if (findResume(resume)) {
-            System.out.printf("Sorry, %s already available \n", resume);
-        } else {
-            writeToCell(resume);
+        if (findResume(resume.getUuid()) < size) {
+            System.out.printf("Sorry, %s already available\n", resume);
+        } else {storage[size] = resume;
+                size++;
         }
     }
 
     public void update(Resume resume) {
-        int counter = 0;
         if (size == 0) {
             System.out.println("Sorry, it's empty here!");
-        } else for (int i = 0; i < size; i++) {
-            if (resume.getUuid().equals(storage[i].toString())) {
-                storage[i] = resume;
-                return;
-            } else if (size > i) {
-                counter++;
-                if (size == counter) {
-                    System.out.printf("Sorry, what we are looking for is not %s! \n", resume.getUuid());
-                }
-            }
+            return;
         }
+        if (findResume(resume.getUuid()) < size) {
+            storage[findResume(resume.getUuid())] = resume;
+        } else System.out.printf("Sorry, there is no  %s here!\n", resume.getUuid());
     }
 
     public Resume get(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (uuid.equals(storage[i].toString())) {
-                return storage[i];
-            }
+        if (findResume(uuid) < size) {
+            return storage[findResume(uuid)];
         }
-        System.out.printf("Sorry, he's not %s! \n", uuid);
+        System.out.printf("Sorry, he's not %s!\n", uuid);
         return null;
+
     }
 
     public void delete(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (uuid.equals(storage[i].toString())) {
-                storage[i] = storage[size - 1];
-                storage[size - 1] = null;
-                size--;
-                return;
-            }
-        }
-        System.out.printf("Sorry, %s failed to delete \n", uuid);
+        if (findResume(uuid) >= 0 & size != 0) {
+            storage[findResume(uuid)] = storage[size - 1];
+            storage[size - 1] = null;
+            size--;
+        } else System.out.printf("Sorry, %s failed to delete\n", uuid);
     }
 
     public Resume[] getAll() {
@@ -78,16 +62,15 @@ public class ArrayStorage {
         return size;
     }
 
-    private boolean findResume(Resume resume) {
-        boolean rb = false;
+    private int findResume(String uuid) {
+        int indexCell = 0;
         for (int i = 0; i < size; i++) {
-            rb = storage[i].getUuid().equals(resume.getUuid());
+            if (storage[i].getUuid().equals(uuid)) {
+                indexCell = i;
+                break;
+            }
+            indexCell = size;
         }
-        return rb;
-    }
-
-    private void writeToCell(Resume resume) {
-        storage[size] = resume;
-        size++;
+        return indexCell;
     }
 }
