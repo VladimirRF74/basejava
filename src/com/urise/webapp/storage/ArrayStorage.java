@@ -20,19 +20,22 @@ public class ArrayStorage {
         }
         if (findResume(resume.getUuid()) < size) {
             System.out.printf("Sorry, %s already available\n", resume);
-        } else {storage[size] = resume;
-                size++;
+        } else {
+            storage[size] = resume;
+            size++;
         }
     }
 
     public void update(Resume resume) {
+        String resumeUuid = resume.getUuid();
+        int index = findResume(resumeUuid);
         if (size == 0) {
             System.out.println("Sorry, it's empty here!");
             return;
         }
-        if (findResume(resume.getUuid()) < size) {
-            storage[findResume(resume.getUuid())] = resume;
-        } else System.out.printf("Sorry, there is no  %s here!\n", resume.getUuid());
+        if (index < size) {
+            storage[index] = resume;
+        } else System.out.printf("Sorry, there is no  %s here!\n", resumeUuid);
     }
 
     public Resume get(String uuid) {
@@ -45,8 +48,9 @@ public class ArrayStorage {
     }
 
     public void delete(String uuid) {
-        if (findResume(uuid) >= 0 & size != 0) {
-            storage[findResume(uuid)] = storage[size - 1];
+        int index = findResume(uuid);
+        if (index >= 0 & size != 0) {
+            storage[index] = storage[size - 1];
             storage[size - 1] = null;
             size--;
         } else System.out.printf("Sorry, %s failed to delete\n", uuid);
@@ -66,6 +70,7 @@ public class ArrayStorage {
         int indexCell = 0;
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
+                //return i;
                 indexCell = i;
                 break;
             }
