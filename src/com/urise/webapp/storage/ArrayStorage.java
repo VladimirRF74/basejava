@@ -39,8 +39,9 @@ public class ArrayStorage {
     }
 
     public Resume get(String uuid) {
-        if (findResume(uuid) < size) {
-            return storage[findResume(uuid)];
+        int index = findResume(uuid);
+        if (index < size) {
+            return storage[index];
         }
         System.out.printf("Sorry, he's not %s!\n", uuid);
         return null;
@@ -67,15 +68,11 @@ public class ArrayStorage {
     }
 
     private int findResume(String uuid) {
-        int indexCell = 0;
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
-                //return i;
-                indexCell = i;
-                break;
+                return i;
             }
-            indexCell = size;
         }
-        return indexCell;
+        return size;
     }
 }
