@@ -14,7 +14,29 @@ public abstract class AbstractArrayStorage implements Storage {
         size = 0;
     }
 
-    public abstract void save(Resume resume);
+    public final void save(Resume resume) {
+        int index = findResume(resume.getUuid());
+        int indexAbs = Math.abs(index);
+        if (isOverflow()) return;
+        if (index >= 0) {
+            System.out.printf("Sorry, %s already available\n", resume);
+            return;
+        } else if (size == 0) {
+            storage[size] = resume;
+        } else {
+            saveMethod(resume, indexAbs);
+        }
+        size++;
+    }
+
+    protected abstract void saveMethod(Resume resume, int indexAbs);
+
+    protected boolean isOverflow() {
+        if (size >= STORAGE_LIMIT) {
+            System.out.println("Sorry, array is full");
+            return true;
+        } else return false;
+    }
 
     public void update(Resume resume) {
         String resumeUuid = resume.getUuid();
@@ -37,7 +59,24 @@ public abstract class AbstractArrayStorage implements Storage {
         return storage[index];
     }
 
-    public abstract void delete(String uuid);
+    public final void delete(String uuid) {
+        if (error(uuid) < 0) {
+            return;
+        }
+        deleteItem(error(uuid));
+    }
+
+    protected int error(String uuid) {
+        int index = findResume(uuid);
+        if (index < 0) {
+            System.out.printf("Sorry, %s failed to delete\n", uuid);
+        }
+        return index;
+    }
+
+    protected abstract int findResume(String uuid);
+
+    protected abstract void deleteItem(int index);
 
     public Resume[] getAll() {
         return Arrays.copyOfRange(storage, 0, size);
@@ -45,14 +84,5 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public int getSize() {
         return size;
-    }
-
-    protected abstract int findResume(String uuid);
-
-    protected boolean isOverflow() {
-        if (size >= STORAGE_LIMIT) {
-            System.out.println("Sorry, array is full");
-            return true;
-        } else return false;
     }
 }

@@ -5,26 +5,15 @@ import com.urise.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void save(Resume resume) {
-        if (isOverflow()) return;
-        if (findResume(resume.getUuid()) != -1) {
-            System.out.printf("Sorry, %s already available\n", resume);
-        } else {
-            storage[size] = resume;
-            size++;
-        }
+    protected void saveMethod(Resume resume, int indexAbs) {
+        storage[size] = resume;
     }
 
     @Override
-    public void delete(String uuid) {
-        int index = findResume(uuid);
-        if (index == -1) {
-            System.out.printf("Sorry, %s failed to delete\n", uuid);
-        } else {
-            storage[index] = storage[size - 1];
-            storage[size - 1] = null;
-            size--;
-        }
+    protected void deleteItem(int index) {
+        storage[index] = storage[size - 1];
+        storage[size - 1] = null;
+        size--;
     }
 
     @Override
