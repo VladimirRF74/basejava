@@ -9,35 +9,39 @@ public abstract class AbstractArrayStorage implements Storage {
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
+    @Override
     public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
+    @Override
     public final void save(Resume resume) {
         int index = findResume(resume.getUuid());
-        int indexAbs = Math.abs(index);
         if (isOverflow()) return;
         if (index >= 0) {
             System.out.printf("Sorry, %s already available\n", resume);
             return;
-        } else if (size == 0) {
+        }
+        if (size == 0) {
             storage[size] = resume;
         } else {
-            saveMethod(resume, indexAbs);
+            saveToArray(resume, index);
         }
         size++;
     }
 
-    protected abstract void saveMethod(Resume resume, int indexAbs);
+    protected abstract void saveToArray(Resume resume, int index);
 
-    protected boolean isOverflow() {
+    private boolean isOverflow() {
         if (size >= STORAGE_LIMIT) {
             System.out.println("Sorry, array is full");
             return true;
-        } else return false;
+        }
+        return false;
     }
 
+    @Override
     public void update(Resume resume) {
         String resumeUuid = resume.getUuid();
         int index = findResume(resumeUuid);
@@ -50,6 +54,7 @@ public abstract class AbstractArrayStorage implements Storage {
         } else storage[index] = resume;
     }
 
+    @Override
     public Resume get(String uuid) {
         int index = findResume(uuid);
         if (index < 0) {
@@ -59,29 +64,28 @@ public abstract class AbstractArrayStorage implements Storage {
         return storage[index];
     }
 
+    @Override
     public final void delete(String uuid) {
-        if (error(uuid) < 0) {
-            return;
-        }
-        deleteItem(error(uuid));
-    }
-
-    protected int error(String uuid) {
         int index = findResume(uuid);
         if (index < 0) {
             System.out.printf("Sorry, %s failed to delete\n", uuid);
+            return;
         }
-        return index;
+        deleteItem(index);
+        storage[size - 1] = null;
+        size--;
     }
-
-    protected abstract int findResume(String uuid);
 
     protected abstract void deleteItem(int index);
 
+    protected abstract int findResume(String uuid);
+
+    @Override
     public Resume[] getAll() {
         return Arrays.copyOfRange(storage, 0, size);
     }
 
+    @Override
     public int getSize() {
         return size;
     }

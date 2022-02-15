@@ -5,15 +5,13 @@ import com.urise.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void saveMethod(Resume resume, int indexAbs) {
+    protected void saveToArray(Resume resume, int index) {
         storage[size] = resume;
     }
 
     @Override
     protected void deleteItem(int index) {
         storage[index] = storage[size - 1];
-        storage[size - 1] = null;
-        size--;
     }
 
     @Override
