@@ -26,12 +26,12 @@ public abstract class AbstractArrayStorage implements Storage {
         if (size == 0) {
             storage[size] = resume;
         } else {
-            saveToArray(resume, index);
+            saveToArray(resume);
         }
         size++;
     }
 
-    protected abstract void saveToArray(Resume resume, int index);
+    protected abstract void saveToArray(Resume resume);
 
     private boolean isOverflow() {
         if (size >= STORAGE_LIMIT) {
