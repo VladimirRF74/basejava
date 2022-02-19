@@ -27,19 +27,23 @@ public abstract class AbstractArrayStorageTest {
         storage.save(new Resume(UUID_3));
     }
 
-    @Test(expected = NotExistStorageException.class)
+    @Test
     public void clear() {
         storage.clear();
         assertEquals(0, storage.getSize());
-        storage.get(UUID_1);
     }
 
-    @Test(expected = ExistStorageException.class)
+    @Test
     public void save() {
         Resume resume = new Resume();
         storage.save(resume);
         assertEquals(4, storage.getSize());
         assertSame(resume, storage.get(String.valueOf(resume)));
+
+    }
+
+    @Test(expected = ExistStorageException.class)
+    public void saveExist() {
         storage.save(new Resume(UUID_1));
     }
 
@@ -50,9 +54,26 @@ public abstract class AbstractArrayStorageTest {
         assertSame(resume, storage.get(UUID_2));
     }
 
+    @Test(expected = NotExistStorageException.class)
+    public void delete() {
+        storage.delete(UUID_1);
+        assertEquals(2, storage.getSize());
+        storage.get(UUID_1);
+    }
+
+    @Test(expected = NotExistStorageException.class)
+    public void deleteNotExist() {
+        storage.delete("dummy");
+    }
+
     @Test
     public void get() {
         assertEquals(new Resume(UUID_1), storage.get(UUID_1));
+    }
+
+    @Test(expected = NotExistStorageException.class)
+    public void getNotExist() {
+        storage.get("dummy");
     }
 
     @Test
@@ -60,22 +81,9 @@ public abstract class AbstractArrayStorageTest {
         assertEquals(3, storage.getSize());
     }
 
-    @Test(expected = NotExistStorageException.class)
-    public void delete() {
-        storage.delete(UUID_1);
-        assertEquals(2, storage.getSize());
-        storage.get(UUID_1);
-        storage.delete("dummy");
-    }
-
     @Test
     public void getAll() {
         assertArrayEquals(new Resume[]{new Resume(UUID_1), new Resume(UUID_2), new Resume(UUID_3)}, storage.getAll());
-    }
-
-    @Test(expected = NotExistStorageException.class)
-    public void getNotExist() {
-        storage.get("dummy");
     }
 
     @Test(expected = StorageException.class)
