@@ -9,12 +9,12 @@ public abstract class AbstractStorage implements Storage {
     protected final Resume[] storage;
     protected int size = 0;
 
-    protected AbstractStorage(Resume[] storage) {
-        this.storage = storage;
-    }
-
     public AbstractStorage() {
         storage = new Resume[0];
+    }
+
+    protected AbstractStorage(Resume[] storage) {
+        this.storage = storage;
     }
 
     @Override
@@ -55,8 +55,10 @@ public abstract class AbstractStorage implements Storage {
         if (index < 0) {
             throw new NotExistStorageException(uuid);
         }
-        return storage[index];
+        return getOf(index);
     }
+
+    protected abstract Resume getOf(int index);
 
     protected abstract void saveUpdate(int index, Resume resume);
 

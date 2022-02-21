@@ -24,18 +24,17 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        int i = 0;
-        Resume[] resumes = new Resume[size];
-        for (Resume r : resumeList) {
-            resumes[i] = r;
-            i++;
-        }
-        return resumes;
+        return resumeList.toArray(Resume[]::new);
     }
 
     @Override
     public int getSize() {
         return resumeList.size();
+    }
+
+    @Override
+    protected Resume getOf(int index) {
+        return resumeList.get(index);
     }
 
     @Override
