@@ -4,20 +4,14 @@ import com.urise.webapp.model.Resume;
 
 public class ArrayStorage extends AbstractArrayStorage {
 
-    public ArrayStorage() {
-        super();
-    }
-
     @Override
-    protected void saveItem(Resume resume) {
+    protected void saveToArray(Resume resume) {
         storage[size] = resume;
-        size++;
     }
 
     @Override
-    protected void deleteItem(int index) {
+    protected void deleteToArray(int index) {
         storage[index] = storage[size - 1];
-        size--;
     }
 
     @Override
