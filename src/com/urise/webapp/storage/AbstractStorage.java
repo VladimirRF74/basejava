@@ -1,42 +1,18 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
-import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
-    protected final Resume[] storage;
-    protected int size = 0;
-
-    public AbstractStorage() {
-        storage = new Resume[0];
-    }
-
-    protected AbstractStorage(Resume[] storage) {
-        this.storage = storage;
-    }
 
     @Override
-    public final void save(Resume resume) {
-        if (isOverflow(resume)) {
-            throw new StorageException("Storage overflow", resume.getUuid());
-        }
-        if (isExist(resume)) {
-            throw new ExistStorageException(resume.getUuid());
-        }
-        saveToArray(resume);
-        size++;
-    }
-
-    @Override
-    public void update(Resume resume) {
+    public final void update(Resume resume) {
         String resumeUuid = resume.getUuid();
         int index = findResume(resumeUuid);
         if (index < 0) {
             throw new NotExistStorageException(resumeUuid);
         }
-        saveUpdate(index, resume);
+        saveNewItem(index, resume);
     }
 
     @Override
@@ -45,12 +21,11 @@ public abstract class AbstractStorage implements Storage {
         if (index < 0) {
             throw new NotExistStorageException(uuid);
         }
-        deleteFromArray(index);
-        size--;
+        deleteItem(index);
     }
 
     @Override
-    public Resume get(String uuid) {
+    public final Resume get(String uuid) {
         int index = findResume(uuid);
         if (index < 0) {
             throw new NotExistStorageException(uuid);
@@ -60,15 +35,9 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract Resume getOf(int index);
 
-    protected abstract void saveUpdate(int index, Resume resume);
+    protected abstract void saveNewItem(int index, Resume resume);
 
-    protected abstract void deleteFromArray(int index);
-
-    protected abstract boolean isExist(Resume resume);
-
-    protected abstract boolean isOverflow(Resume resume);
-
-    protected abstract void saveToArray(Resume resume);
+    protected abstract void deleteItem(int index);
 
     protected abstract int findResume(String uuid);
 }
