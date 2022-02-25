@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MapStorage extends AbstractStorage {
-    Map<String, Resume> storageMap = new HashMap<>();
+    protected Map<String, Resume> storageMap = new HashMap<>();
 
     @Override
     protected void saveResume(Resume resume) {
