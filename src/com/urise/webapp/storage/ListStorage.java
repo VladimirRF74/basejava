@@ -24,8 +24,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume getResume(Object o) {
-        int index = (int) o;
+    protected Resume getResume(Object searchKey) {
+        int index = (int) searchKey;
         return resumeList.get(index);
     }
 
