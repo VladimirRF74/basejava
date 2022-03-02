@@ -30,9 +30,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected final void deleteResume(Object searchKey) {
-        deleteFromArray((int) (searchKey));
+    protected final void deleteResume(Object uuid) {
+        deleteFromArray((int) uuid);
         size--;
+    }
+
+    protected boolean checkSearchKey(Object searchKey) {
+        return (int) searchKey >= 0;
     }
 
     @Override
@@ -46,14 +50,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume getResume(Object searchKey) {
-        int index = (int) searchKey;
-        return storage[index];
+    protected Resume getResume(Object uuid) {
+        return storage[(int) uuid];
     }
 
     @Override
-    protected void updateResume(Object searchKey, Resume resume) {
-        storage[(int) searchKey] = resume;
+    protected void updateResume(Object uuid, Resume resume) {
+        storage[(int) uuid] = resume;
     }
 
     protected abstract void deleteFromArray(int index);
