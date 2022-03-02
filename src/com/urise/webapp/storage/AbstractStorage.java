@@ -11,7 +11,6 @@ public abstract class AbstractStorage implements Storage {
         Object searchKey = findSearchKey(resume.getUuid());
         if (checkSearchKey(searchKey)) {
             throw new ExistStorageException(resume.getUuid());
-
         }
         saveResume(resume);
     }
