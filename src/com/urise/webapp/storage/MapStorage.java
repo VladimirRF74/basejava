@@ -22,7 +22,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected void updateResume(Object uuid, Resume resume) {
-        String key = resume.getUuid();
+        String key = (String) uuid;
         storageMap.replace(key, resume);
     }
 
