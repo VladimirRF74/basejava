@@ -35,10 +35,10 @@ public class MapUuidStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object findSearchKey(Resume uuid) {
-        String key = uuid.getUuid();
+    protected Object findSearchKey(Resume resume) {
+        String key = resume.getUuid();
         if (storageMap.containsKey(key)) {
-            return uuid;
+            return resume;
         }
         return null;
     }
