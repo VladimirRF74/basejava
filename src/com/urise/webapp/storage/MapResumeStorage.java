@@ -38,9 +38,9 @@ public class MapResumeStorage extends AbstractStorage {
         storageNewMap.remove(key);
     }
 
-    protected Object findSearchKey(String searchKey) {
+    protected Object findSearchKey(Object searchKey) {
         for (String key : storageNewMap.keySet()) {
-            if (storageNewMap.get(key).toString().equals(searchKey)) {
+            if (storageNewMap.get(key).toString().equals(String.valueOf(searchKey))) {
                 return storageNewMap.get(key);
             }
         }
