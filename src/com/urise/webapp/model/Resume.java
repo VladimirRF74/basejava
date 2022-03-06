@@ -7,13 +7,23 @@ import java.util.UUID;
  */
 public class Resume {
     private final String uuid;
+    private String fullName;
+
+    public Resume() {
+        this(UUID.randomUUID().toString(), "default");
+    }
 
     public Resume(String uuid) {
         this.uuid = uuid;
     }
 
-    public Resume() {
-        this(UUID.randomUUID().toString());
+    public Resume(String uuid, String fullName) {
+        this.uuid = uuid;
+        this.fullName = fullName;
+    }
+
+    public String getFullName() {
+        return fullName;
     }
 
     public String getUuid() {
@@ -28,7 +38,7 @@ public class Resume {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Resume)) return false;
 
         Resume resume = (Resume) o;
         return uuid.equals(resume.uuid);
@@ -38,9 +48,4 @@ public class Resume {
     public int hashCode() {
         return uuid.hashCode();
     }
-
-    /*@Override
-    public int compareTo(Resume o) {
-        return uuid.compareTo(o.uuid);
-    }*/
 }

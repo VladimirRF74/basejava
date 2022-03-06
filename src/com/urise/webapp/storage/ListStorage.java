@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    protected List<Resume> resumeList = new ArrayList<>();
+    private final List<Resume> resumeList = new ArrayList<>();
 
     @Override
     public void clear() {
@@ -14,8 +14,9 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        return resumeList.toArray(Resume[]::new);
+    public List<Resume> getAllSorted() {
+        resumeList.sort(AbstractStorage.RESUME_FULLNAME_UUID_COMPARATOR);
+        return resumeList;
     }
 
     @Override

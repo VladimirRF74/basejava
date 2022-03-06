@@ -11,11 +11,11 @@ import static org.junit.Assert.*;
 
 public abstract class AbstractStorageTest {
     private static final String UUID_1 = "uuid1";
-    private static final Resume RESUME_1 = new Resume(UUID_1);
+    private static final Resume RESUME_1 = new Resume(UUID_1, "Donald Duck");
     private static final String UUID_2 = "uuid2";
-    private static final Resume RESUME_2 = new Resume(UUID_2);
+    private static final Resume RESUME_2 = new Resume(UUID_2, "Peter Pen");
     private static final String UUID_3 = "uuid3";
-    private static final Resume RESUME_3 = new Resume(UUID_3);
+    private static final Resume RESUME_3 = new Resume(UUID_3, "Donald Duck");
     private final Storage storage;
 
     protected AbstractStorageTest(Storage storage) {
@@ -46,15 +46,14 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = ExistStorageException.class)
     public void saveExist() {
-        storage.save(new Resume(UUID_1));
+        storage.save(RESUME_1);
     }
 
     @Test
     public void update() {
-        Resume resume = new Resume(UUID_2);
-        storage.update(resume);
+        storage.update(RESUME_2);
         assertEquals(3, storage.getSize());
-        assertSame(resume, storage.get(UUID_2));
+        assertSame(RESUME_2, storage.get(UUID_2));
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -92,8 +91,8 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void getAll() {
-        Resume[] expected = new Resume[]{RESUME_1, RESUME_2, RESUME_3};
-        Resume[] actual = storage.getAll();
+        Resume[] expected = new Resume[]{RESUME_1, RESUME_3, RESUME_2};
+        Resume[] actual = storage.getAllSorted().toArray(new Resume[0]);
         assertArrayEquals(expected, actual);
     }
 

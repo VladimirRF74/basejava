@@ -3,10 +3,9 @@ package com.urise.webapp.storage;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-public class ListStorageTest extends AbstractStorageTest {
-
-    public ListStorageTest() {
-        super(new ListStorage());
+public class MapResumeStorageTest extends AbstractStorageTest {
+    public MapResumeStorageTest() {
+        super(new MapResumeStorage());
     }
 
     @Override
