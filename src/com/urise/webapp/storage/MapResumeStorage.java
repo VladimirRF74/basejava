@@ -28,7 +28,7 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     protected void updateResume(Object uuid, Resume resume) {
-        String key = String.valueOf(uuid);
+        String key = resume.getUuid();
         storageNewMap.replace(key, resume);
     }
 
@@ -38,7 +38,7 @@ public class MapResumeStorage extends AbstractStorage {
         storageNewMap.remove(key);
     }
 
-    protected Object findSearchKey(Object searchKey) {
+    protected Object findSearchKey(Resume searchKey) {
         for (String key : storageNewMap.keySet()) {
             if (storageNewMap.get(key).toString().equals(String.valueOf(searchKey))) {
                 return storageNewMap.get(key);

@@ -45,8 +45,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object findSearchKey(Object uuid) {
-        return resumeList.indexOf(new Resume((String) uuid));
+    protected Object findSearchKey(Resume resume) {
+        return resumeList.indexOf(new Resume(resume.getUuid()));
     }
 
     @Override

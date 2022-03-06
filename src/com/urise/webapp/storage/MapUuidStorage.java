@@ -18,25 +18,25 @@ public class MapUuidStorage extends AbstractStorage {
 
     @Override
     protected Resume getResume(Object uuid) {
-        String key = (String) uuid;
+        String key = String.valueOf(uuid);
         return storageMap.get(key);
     }
 
     @Override
     protected void updateResume(Object uuid, Resume resume) {
-        String key = (String) uuid;
+        String key = resume.getUuid();
         storageMap.replace(key, resume);
     }
 
     @Override
     protected void deleteResume(Object uuid) {
-        String key = (String) uuid;
+        String key = String.valueOf(uuid);
         storageMap.remove(key);
     }
 
     @Override
-    protected Object findSearchKey(Object uuid) {
-        String key = (String) uuid;
+    protected Object findSearchKey(Resume uuid) {
+        String key = uuid.getUuid();
         if (storageMap.containsKey(key)) {
             return uuid;
         }
