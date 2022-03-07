@@ -28,7 +28,7 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     protected void updateResume(Object uuid, Resume resume) {
-        String key = resume.getUuid();
+        String key = (String) uuid;
         storageNewMap.replace(key, resume);
     }
 
