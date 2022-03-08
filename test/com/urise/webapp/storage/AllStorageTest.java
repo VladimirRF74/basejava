@@ -1,11 +1,9 @@
 package com.urise.webapp.storage;
 
-import org.junit.experimental.categories.Categories;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-@RunWith(Categories.class)
-@Categories.ExcludeCategory(value = OnlyArrays.class)
+@RunWith(Suite.class)
 @Suite.SuiteClasses(value = {
         ArrayStorageTest.class,
         SortedArrayStorageTest.class,

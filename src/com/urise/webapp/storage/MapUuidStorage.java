@@ -11,6 +11,16 @@ public class MapUuidStorage extends AbstractStorage {
     private final Map<String, Resume> storageMap = new HashMap<>();
 
     @Override
+    public void clear() {
+        storageMap.clear();
+    }
+
+    @Override
+    public int getSize() {
+        return storageMap.size();
+    }
+
+    @Override
     protected void saveResume(Resume resume) {
         String key = resume.getUuid();
         storageMap.put(key, resume);
@@ -24,7 +34,7 @@ public class MapUuidStorage extends AbstractStorage {
 
     @Override
     protected void updateResume(Object uuid, Resume resume) {
-        String key = (String) uuid;
+        String key = String.valueOf(uuid);
         storageMap.replace(key, resume);
     }
 
@@ -35,32 +45,20 @@ public class MapUuidStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object findSearchKey(Resume resume) {
-        String key = resume.getUuid();
+    protected Object findSearchKey(Object uuid) {
+        String key = String.valueOf(uuid);
         if (storageMap.containsKey(key)) {
-            return resume;
+            return uuid;
         }
         return null;
     }
 
-    public boolean checkSearchKey(Object searchKey) {
+    protected boolean checkSearchKey(Object searchKey) {
         return searchKey != null;
     }
 
     @Override
-    public void clear() {
-        storageMap.clear();
-    }
-
-    @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> list = new ArrayList<>(storageMap.values());
-        list.sort(AbstractStorage.RESUME_FULLNAME_UUID_COMPARATOR);
-        return list;
-    }
-
-    @Override
-    public int getSize() {
-        return storageMap.size();
+    protected List<Resume> getList() {
+        return new ArrayList<>(storageMap.values());
     }
 }

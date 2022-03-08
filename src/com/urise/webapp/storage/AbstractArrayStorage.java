@@ -41,14 +41,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        Resume[] resumes = Arrays.copyOf(storage, size);
-        List<Resume> r = Arrays.asList(resumes);
-        r.sort(AbstractStorage.RESUME_FULLNAME_UUID_COMPARATOR);
-        return r;
-    }
-
-    @Override
     public int getSize() {
         return size;
     }
@@ -61,6 +53,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     protected void updateResume(Object uuid, Resume resume) {
         storage[(int) uuid] = resume;
+    }
+
+    protected List<Resume> getList() {
+        Resume[] resumes = Arrays.copyOf(storage, size);
+        return Arrays.asList(resumes);
     }
 
     protected abstract void deleteFromArray(int index);

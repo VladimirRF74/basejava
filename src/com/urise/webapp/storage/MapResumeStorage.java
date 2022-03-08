@@ -8,7 +8,17 @@ import java.util.List;
 import java.util.Map;
 
 public class MapResumeStorage extends AbstractStorage {
-    private final Map<String, Resume> storageNewMap = new HashMap<>();
+    private final Map<String, Resume> storageResumeMap = new HashMap<>();
+
+    @Override
+    public int getSize() {
+        return storageResumeMap.size();
+    }
+
+    @Override
+    public void clear() {
+        storageResumeMap.clear();
+    }
 
     @Override
     protected boolean checkSearchKey(Object searchKey) {
@@ -18,49 +28,33 @@ public class MapResumeStorage extends AbstractStorage {
     @Override
     protected void saveResume(Resume resume) {
         String key = resume.getUuid();
-        storageNewMap.put(key, resume);
+        storageResumeMap.put(key, resume);
     }
 
     @Override
     protected Resume getResume(Object searchKey) {
         String key = String.valueOf(searchKey);
-        return storageNewMap.get(key);
+        return storageResumeMap.get(key);
     }
 
-    protected void updateResume(Object uuid, Resume resume) {
-        String key = (String) uuid;
-        storageNewMap.replace(key, resume);
+    protected void updateResume(Object searchKey, Resume resume) {
+        String key = String.valueOf(searchKey);
+        storageResumeMap.replace(key, resume);
     }
 
     @Override
     protected void deleteResume(Object searchKey) {
         String key = String.valueOf(searchKey);
-        storageNewMap.remove(key);
+        storageResumeMap.remove(key);
     }
 
-    protected Object findSearchKey(Resume resume) {
-        for (String key : storageNewMap.keySet()) {
-            if (storageNewMap.get(key).equals(resume)) {
-                return storageNewMap.get(key);
-            }
-        }
-        return null;
+    protected Object findSearchKey(Object searchKey) {
+        String key = String.valueOf(searchKey);
+        return storageResumeMap.get(key);
     }
 
     @Override
-    public void clear() {
-        storageNewMap.clear();
-    }
-
-    @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> list = new ArrayList<>(storageNewMap.values());
-        list.sort(AbstractStorage.RESUME_FULLNAME_UUID_COMPARATOR);
-        return list;
-    }
-
-    @Override
-    public int getSize() {
-        return storageNewMap.size();
+    protected List<Resume> getList() {
+        return new ArrayList<>(storageResumeMap.values());
     }
 }

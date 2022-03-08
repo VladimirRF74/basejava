@@ -15,12 +15,13 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected Object findSearchKey(Resume resume) {
+    protected Object findSearchKey(Object uuid) {
         for (int i = 0; i < size; i++) {
-            if (storage[i].getUuid().equals(resume.getUuid())) {
+            if (storage[i].getUuid().equals(String.valueOf(uuid))) {
                 return i;
             }
         }
         return -1;
+
     }
 }

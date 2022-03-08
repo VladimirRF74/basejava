@@ -14,14 +14,13 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        resumeList.sort(AbstractStorage.RESUME_FULLNAME_UUID_COMPARATOR);
-        return resumeList;
+    public int getSize() {
+        return resumeList.size();
     }
 
     @Override
-    public int getSize() {
-        return resumeList.size();
+    protected List<Resume> getList() {
+        return resumeList;
     }
 
     @Override
@@ -45,8 +44,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object findSearchKey(Resume resume) {
-        return resumeList.indexOf(new Resume(resume.getUuid()));
+    protected Object findSearchKey(Object uuid) {
+        return resumeList.indexOf(new Resume(String.valueOf(uuid)));
     }
 
     @Override
