@@ -21,7 +21,7 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean checkSearchKey(Object searchKey) {
+    protected boolean checkObtainedKey(Object searchKey) {
         return searchKey != null;
     }
 
@@ -33,8 +33,7 @@ public class MapResumeStorage extends AbstractStorage {
 
     @Override
     protected Resume getResume(Object searchKey) {
-        String key = String.valueOf(searchKey);
-        return storageResumeMap.get(key);
+        return (Resume) searchKey;
     }
 
     protected void updateResume(Object searchKey, Resume resume) {
@@ -48,7 +47,8 @@ public class MapResumeStorage extends AbstractStorage {
         storageResumeMap.remove(key);
     }
 
-    protected Object findSearchKey(Object searchKey) {
+    @Override
+    protected Object findSearchKey(String searchKey) {
         String key = String.valueOf(searchKey);
         return storageResumeMap.get(key);
     }

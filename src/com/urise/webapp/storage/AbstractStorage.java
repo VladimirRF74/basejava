@@ -14,8 +14,8 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public final void save(Resume resume) {
-        Object searchKey = findSearchKey(resume);
-        if (checkSearchKey(searchKey)) {
+        Object searchKey = findSearchKey(resume.getUuid());
+        if (checkObtainedKey(searchKey)) {
             throw new ExistStorageException(resume.getUuid());
         }
         saveResume(resume);
@@ -30,23 +30,23 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public final void update(Resume resume) {
-        updateResume(notExistStorage(resume.getUuid()), resume);
+        updateResume(getSearchKeyIfExist(resume.getUuid()), resume);
     }
 
     @Override
     public final void delete(String uuid) {
-        deleteResume(notExistStorage(uuid));
+        deleteResume(getSearchKeyIfExist(uuid));
     }
 
     @Override
     public final Resume get(String uuid) {
-        return getResume(notExistStorage(uuid));
+        return getResume(getSearchKeyIfExist(uuid));
     }
 
-    private Object notExistStorage(Object uuid) {
+    private Object getSearchKeyIfExist(String uuid) {
         Object searchKey = findSearchKey(uuid);
-        if (!checkSearchKey(searchKey)) {
-            throw new NotExistStorageException((String) uuid);
+        if (!checkObtainedKey(searchKey)) {
+            throw new NotExistStorageException(uuid);
 
         }
         return searchKey;
@@ -54,7 +54,7 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract List<Resume> getList();
 
-    protected abstract boolean checkSearchKey(Object searchKey);
+    protected abstract boolean checkObtainedKey(Object searchKey);
 
     protected abstract void saveResume(Resume resume);
 
@@ -64,5 +64,5 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract void deleteResume(Object searchKey);
 
-    protected abstract Object findSearchKey(Object searchKey);
+    protected abstract Object findSearchKey(String searchKey);
 }

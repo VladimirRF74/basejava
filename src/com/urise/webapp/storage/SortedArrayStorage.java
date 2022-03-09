@@ -10,7 +10,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected void saveToArray(Resume resume) {
-        int insertionIndex = Math.abs((int) findSearchKey(resume));
+        int insertionIndex = Math.abs((int) findSearchKey(String.valueOf(resume)));
         System.arraycopy(storage, insertionIndex - 1, storage, insertionIndex, size - (insertionIndex - 1));
         storage[insertionIndex - 1] = resume;
     }
@@ -21,8 +21,8 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected Object findSearchKey(Object uuid) {
-        Resume searchKey = new Resume(String.valueOf(uuid));
+    protected Object findSearchKey(String uuid) {
+        Resume searchKey = new Resume(uuid, "default");
         return Arrays.binarySearch(storage, 0, size, searchKey, RESUME_COMPARATOR);
     }
 }

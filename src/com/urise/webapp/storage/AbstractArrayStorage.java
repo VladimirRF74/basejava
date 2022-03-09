@@ -31,13 +31,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected final void deleteResume(Object uuid) {
-        deleteFromArray((int) uuid);
+    protected final void deleteResume(Object index) {
+        deleteFromArray((int) index);
         size--;
     }
 
-    protected boolean checkSearchKey(Object searchKey) {
-        return (int) searchKey >= 0;
+    protected boolean checkObtainedKey(Object index) {
+        return (int) index >= 0;
     }
 
     @Override
@@ -46,13 +46,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume getResume(Object uuid) {
-        return storage[(int) uuid];
+    protected Resume getResume(Object index) {
+        return storage[(int) index];
     }
 
     @Override
-    protected void updateResume(Object uuid, Resume resume) {
-        storage[(int) uuid] = resume;
+    protected void updateResume(Object index, Resume resume) {
+        storage[(int) index] = resume;
     }
 
     protected List<Resume> getList() {

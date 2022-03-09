@@ -5,10 +5,10 @@ package com.urise.webapp.model;
  */
 public class Resume {
     private final String uuid;
-    private String fullName;
+    private final String fullName;
 
-    public Resume(String uuid) {
-        this.uuid = uuid;
+    public Resume(String fullName) {
+        this("default", fullName);
     }
 
     public Resume(String uuid, String fullName) {

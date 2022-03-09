@@ -29,8 +29,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean checkSearchKey(Object searchKey) {
-        return (int) searchKey >= 0;
+    protected boolean checkObtainedKey(Object index) {
+        return (int) index >= 0;
     }
 
     @Override
@@ -44,8 +44,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object findSearchKey(Object uuid) {
-        return resumeList.indexOf(new Resume(String.valueOf(uuid)));
+    protected Object findSearchKey(String uuid) {
+        return resumeList.indexOf(new Resume(uuid, "default"));
     }
 
     @Override
