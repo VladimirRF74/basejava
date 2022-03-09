@@ -14,16 +14,15 @@ public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
 
     @Test(expected = StorageException.class)
     public void checkOverflow() {
-        int i = 0;
         storage.clear();
         try {
-            for (; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
-                Resume resume = new Resume("uuid" + i, "fullname" + i);
+            for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
+                Resume resume = new Resume("fullname" + i);
                 storage.save(resume);
             }
         } catch (StorageException e) {
             fail("Exception was thrown earlier than expected");
         }
-        storage.save(new Resume("uuid", "fullname"));
+        storage.save(new Resume("fullname"));
     }
 }

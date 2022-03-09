@@ -29,7 +29,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean checkObtainedKey(Object index) {
+    protected boolean isExist(Object index) {
         return (int) index >= 0;
     }
 
@@ -45,7 +45,12 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected Object findSearchKey(String uuid) {
-        return resumeList.indexOf(new Resume(uuid, "default"));
+        for (Resume r : resumeList) {
+            if (r.getUuid().equals(String.valueOf(uuid))) {
+                return resumeList.indexOf(r);
+            }
+        }
+        return -1;
     }
 
     @Override
