@@ -43,7 +43,7 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
 
     @Override
     protected void deleteResume(Resume searchKey) {
-        String key = String.valueOf(searchKey);
+        String key = searchKey.getUuid();
         storageResumeMap.remove(key);
     }
 

@@ -1,5 +1,6 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.ResumeTestData;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
@@ -14,13 +15,13 @@ import static org.junit.Assert.assertSame;
 
 public abstract class AbstractStorageTest {
     private static final String UUID_1 = "uuid1";
-    private static final Resume RESUME_1 = new Resume(UUID_1, "Donald Duck");
+    private static final Resume RESUME_1 = ResumeTestData.create(UUID_1, "Donald Duck");
     private static final String UUID_2 = "uuid2";
-    private static final Resume RESUME_2 = new Resume(UUID_2, "Peter Pen");
+    private static final Resume RESUME_2 = ResumeTestData.create(UUID_2, "Peter Pen");
     private static final String UUID_3 = "uuid3";
-    private static final Resume RESUME_3 = new Resume(UUID_3, "Donald Duck");
+    private static final Resume RESUME_3 = ResumeTestData.create(UUID_3, "Donald Duck");
     private static final String UUID_4 = "uuid4";
-    private static final Resume RESUME_4 = new Resume(UUID_4, "Micky Mouse");
+    private static final Resume RESUME_4 = ResumeTestData.create(UUID_4, "Micky Mouse");
     protected final Storage storage;
 
     protected AbstractStorageTest(Storage storage) {

@@ -1,11 +1,15 @@
 package com.urise.webapp.model;
 
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
 public class Resume {
     private final String uuid;
     private final String fullName;
+    private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -18,6 +22,22 @@ public class Resume {
         this.fullName = fullName;
     }
 
+    public void setContacts(Map<ContactType, String> contacts) {
+        this.contacts = contacts;
+    }
+
+    public void setSections(Map<SectionType, Section> sections) {
+        this.sections = sections;
+    }
+
+    public Section getSections(SectionType type) {
+        return sections.get(type);
+    }
+
+    public String getContacts(ContactType type) {
+        return contacts.get(type);
+    }
+
     public String getFullName() {
         return fullName;
     }
@@ -28,7 +48,7 @@ public class Resume {
 
     @Override
     public String toString() {
-        return uuid;
+        return uuid + "\n" + fullName;
     }
 
     @Override

@@ -17,7 +17,7 @@ public abstract class AbstractStorage<SK> implements Storage {
     @Override
     public final void save(Resume resume) {
         LOG.info("Save " + resume);
-        SK searchKey = findSearchKey(String.valueOf(resume));
+        SK searchKey = findSearchKey(resume.getUuid());
         if (isExist(searchKey)) {
             LOG.warning("Resume " + resume + " exist");
             throw new ExistStorageException(resume.getUuid());
