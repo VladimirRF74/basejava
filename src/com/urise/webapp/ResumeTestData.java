@@ -9,15 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ResumeTestData {
-    static Map<SectionType, Section> sections = new HashMap<>();
-    static Map<ContactType, String> contacts = new HashMap<>();
-    static List<String> listAchievement = new ArrayList<>();
-    static List<String> listQualifications = new ArrayList<>();
-    static List<Organization> listExperience = new ArrayList<>();
-    static List<Organization> listEducation = new ArrayList<>();
-    static TextSection sectionObjective = new TextSection("\tВедущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
-    static TextSection sectionPersonal = new TextSection("\tАналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры.");
-
     public static void main(String[] args) {
         Resume resume = new Resume("Pieter Pen");
         resume = create(resume.getUuid(), resume.getFullName());
@@ -37,6 +28,15 @@ public class ResumeTestData {
 
     public static Resume create(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
+        Map<SectionType, AbstractSection> sections = new HashMap<>();
+        Map<ContactType, String> contacts = new HashMap<>();
+        List<String> listAchievement = new ArrayList<>();
+        List<String> listQualifications = new ArrayList<>();
+        List<Organization> listExperience = new ArrayList<>();
+        List<Organization> listEducation = new ArrayList<>();
+        TextSection sectionObjective = new TextSection("\tВедущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
+        TextSection sectionPersonal = new TextSection("\tАналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры.");
+
         contacts.put(ContactType.PHONE, "+7(921) 855-0482");
         contacts.put(ContactType.EMAIL, "gkislin@yandex.ru");
         contacts.put(ContactType.SKYPE, "grigory.kislin");
@@ -51,32 +51,31 @@ public class ResumeTestData {
         listQualifications.add("\tDB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle");
 
         listExperience.add(new Organization("Java Online Projects", "JavaOnlineProjects.com",
-                LocalDate.of(2013, 10, 1),
-                LocalDate.now(),
-                "Автор проекта.",
-                "Создание, организация и проведение Java онлайн проектов и стажировок."));
-        listExperience.add(new Organization("Wrike",
-                "wrike.com",
-                LocalDate.of(2014, 10, 1),
-                LocalDate.of(2016, 1, 1),"Старший разработчик (backend)",
-                "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API," +
-                        " Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis)." +
-                        " Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."));
-        listEducation.add(new Organization("Coursera",
-                "coursera.com",
-                LocalDate.of(2013,3, 1),
-                LocalDate.of(2013, 5, 1),
-                "Functional Programming Principles in Scala by Martin Odersky", ""));
+                new Specialisation(LocalDate.of(2013, 10, 1),
+                        LocalDate.now(), "Автор проекта.",
+                        "Создание, организация и проведение Java онлайн проектов и стажировок.")));
+
+        listExperience.add(new Organization("Wrike", "wrike.com",
+                new Specialisation(LocalDate.of(2013, 10, 1),
+                        LocalDate.of(2016, 1, 1),
+                        "Старший разработчик (backend)",
+                        "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API," +
+                                " Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis)." +
+                                " Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.")));
+
+        listEducation.add(new Organization("Coursera", "coursera.com",
+                new Specialisation(LocalDate.of(2013, 3, 1),
+                        LocalDate.of(2013, 5, 1),
+                        "Functional Programming Principles in Scala by Martin Odersky", "")));
+
         listEducation.add(new Organization("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
-                "link.com",
-                LocalDate.of(1993,3, 1),
+                "link.com", new Specialisation(LocalDate.of(1993, 3, 1),
                 LocalDate.of(1996, 9, 1),
-                "Аспирантура (программист С, С++)", ""));
-        listEducation.add(new Organization("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
-                "link.com",
-                LocalDate.of(1987,8, 1),
-                LocalDate.of(1993, 7, 1),
-                "Аспирантура (программист С, С++)", ""));
+                "Аспирантура (программист С, С++)", ""),
+                new Specialisation(LocalDate.of(1987, 8, 1),
+                        LocalDate.of(1993, 7, 1),
+                        "Инженер (программист Fortran, C)", "")));
+
         sections.put(SectionType.OBJECTIVE, sectionObjective);
         sections.put(SectionType.PERSONAL, sectionPersonal);
         sections.put(SectionType.ACHIEVEMENT, new ListSection(listAchievement));

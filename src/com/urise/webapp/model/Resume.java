@@ -9,7 +9,7 @@ public class Resume {
     private final String uuid;
     private final String fullName;
     private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-    private Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
+    private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -26,11 +26,11 @@ public class Resume {
         this.contacts = contacts;
     }
 
-    public void setSections(Map<SectionType, Section> sections) {
+    public void setSections(Map<SectionType, AbstractSection> sections) {
         this.sections = sections;
     }
 
-    public Section getSections(SectionType type) {
+    public AbstractSection getSections(SectionType type) {
         return sections.get(type);
     }
 
@@ -47,11 +47,6 @@ public class Resume {
     }
 
     @Override
-    public String toString() {
-        return uuid + "\n" + fullName;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Resume)) return false;
@@ -59,13 +54,22 @@ public class Resume {
         Resume resume = (Resume) o;
 
         if (!uuid.equals(resume.uuid)) return false;
-        return fullName.equals(resume.fullName);
+        if (!fullName.equals(resume.fullName)) return false;
+        if (!Objects.equals(contacts, resume.contacts)) return false;
+        return Objects.equals(sections, resume.sections);
     }
 
     @Override
     public int hashCode() {
         int result = uuid.hashCode();
         result = 31 * result + fullName.hashCode();
+        result = 31 * result + (contacts != null ? contacts.hashCode() : 0);
+        result = 31 * result + (sections != null ? sections.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return uuid + "\n" + fullName;
     }
 }
