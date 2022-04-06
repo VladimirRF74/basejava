@@ -22,7 +22,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected final void saveResume(Resume resume) {
+    protected final void saveResume(Integer index, Resume resume) {
         if (size >= STORAGE_LIMIT) {
             throw new StorageException("Storage overflow");
         }

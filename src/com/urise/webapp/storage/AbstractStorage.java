@@ -22,7 +22,7 @@ public abstract class AbstractStorage<SK> implements Storage {
             LOG.warning("Resume " + resume + " exist");
             throw new ExistStorageException(resume.getUuid());
         }
-        saveResume(resume);
+        saveResume(searchKey, resume);
     }
 
     @Override
@@ -65,7 +65,7 @@ public abstract class AbstractStorage<SK> implements Storage {
 
     protected abstract boolean isExist(SK searchKey);
 
-    protected abstract void saveResume(Resume resume);
+    protected abstract void saveResume(SK searchKey, Resume resume);
 
     protected abstract Resume getResume(SK searchKey);
 

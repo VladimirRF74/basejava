@@ -1,7 +1,6 @@
 .idea
 out
+lib
 *.iml
+*.md
 log
-
-
-

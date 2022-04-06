@@ -1,11 +1,15 @@
 package com.urise.webapp.model;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Resume {
+public class Resume implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final String uuid;
     private final String fullName;
     private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
@@ -44,6 +48,14 @@ public class Resume {
 
     public String getUuid() {
         return uuid;
+    }
+
+    public void addContact(ContactType type, String value) {
+        contacts.put(type, value);
+    }
+
+    public void addSection(SectionType type, AbstractSection section) {
+        sections.put(type, section);
     }
 
     @Override
