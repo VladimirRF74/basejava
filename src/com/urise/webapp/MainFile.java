@@ -16,7 +16,7 @@ public class MainFile {
         }
 
         File dir = new File("src");
-        printDir(dir);
+        printDir(dir, "");
         /*System.out.println(dir.isDirectory());
         String[] list = dir.list();
         if (list != null) {
@@ -32,15 +32,15 @@ public class MainFile {
         }
     }
 
-    static void printDir(File dir) {
+    static void printDir(File dir, String indent) {
         File[] files = dir.listFiles();
         assert files != null;
         for (File f : files) {
             if (f.isFile()) {
-                System.out.println("\t" + f.getName());
+                System.out.println(indent + "\t" + f.getName());
             } else {
-                System.out.println(f.getName());
-                printDir(f);
+                System.out.println(indent + f.getName());
+                printDir(f, "\t");
             }
         }
     }

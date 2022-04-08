@@ -2,6 +2,7 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.strategy.InterfaceOfStrategy;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,13 +11,12 @@ import java.util.Objects;
 
 public class FileStorage extends AbstractStorage<File> {
     private final File directory;
-    private ObjectIOStreamStorage objectIOStreamStorage;
+    private final InterfaceOfStrategy objectIOStreamStorage;
 
-    protected FileStorage(File directory, ObjectIOStreamStorage objectIOStreamStorage) {
+    protected FileStorage(File directory, InterfaceOfStrategy objectIOStreamStorage) {
         Objects.requireNonNull(directory, "directory must not be null");
-        directory.mkdir();
         this.objectIOStreamStorage = objectIOStreamStorage;
-        if (!directory.isDirectory()) {
+        if (directory.mkdir()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
         }
         if (!directory.canRead() || !directory.canWrite()) {
@@ -27,12 +27,8 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> getList() {
-        File[] files = directory.listFiles();
-        if (files == null) {
-            throw new StorageException("Directory read error");
-        }
-        List<Resume> list = new ArrayList<>(files.length);
-        for (File file : files) {
+        List<Resume> list = new ArrayList<>(getSize());
+        for (File file : getArrayOfFiles()) {
             list.add(getResume(file));
         }
         return list;
@@ -80,20 +76,21 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        File[] files = directory.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                deleteResume(file);
-            }
+        for (File file : getArrayOfFiles()) {
+            deleteResume(file);
         }
     }
 
     @Override
     public int getSize() {
-        String[] list = directory.list();
-        if (list == null) {
+        return getArrayOfFiles().length;
+    }
+
+    private File[] getArrayOfFiles() {
+        File[] files = directory.listFiles();
+        if (files == null) {
             throw new StorageException("Directory read error");
         }
-        return list.length;
+        return files;
     }
 }

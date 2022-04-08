@@ -2,27 +2,33 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.strategy.InterfaceOfStrategy;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
-    private ObjectIOStreamStorage objectIOStreamStorage;
+    private final InterfaceOfStrategy objectIOStreamStorage;
 
-    public PathStorage(String dir, ObjectIOStreamStorage objectIOStreamStorage) {
+    public PathStorage(String dir, InterfaceOfStrategy objectIOStreamStorage) {
         Objects.requireNonNull(dir, "directory must not be null");
         directory = Paths.get(dir);
         this.objectIOStreamStorage = objectIOStreamStorage;
-        try {
-            Files.createDirectory(directory);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (directory == null) {
+            try {
+                Files.createDirectory(directory);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or is not writable");
@@ -51,7 +57,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume getResume(Path path) {
         try {
-            return objectIOStreamStorage.doRead(new BufferedInputStream(new FileInputStream(String.valueOf(path))));
+            return objectIOStreamStorage.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Path read error", directory.getFileName().toString(), e);
         }
@@ -60,7 +66,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected void updateResume(Path path, Resume resume) {
         try {
-            objectIOStreamStorage.doWrite(resume, new BufferedOutputStream(new FileOutputStream(String.valueOf(path))));
+            objectIOStreamStorage.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Path write error", resume.getUuid(), e);
         }
@@ -91,10 +97,14 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public int getSize() {
+        return (int) getListOfFiles().count();
+    }
+
+    private Stream<Path> getListOfFiles() {
         try {
-            return (int) Files.list(directory).count();
+            return Files.list(directory);
         } catch (IOException e) {
-            throw new StorageException("Directory read error", directory.toAbsolutePath().toString(), e);
+            throw new StorageException("Directory read error", null, e);
         }
     }
 }
