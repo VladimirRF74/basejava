@@ -14,16 +14,16 @@ public class ResumeTestData {
         resume = create(resume.getUuid(), resume.getFullName());
 
         System.out.println(resume);
-        System.out.println(ContactType.PHONE.getTitle() + " " + resume.getContacts(ContactType.PHONE));
-        System.out.println(ContactType.EMAIL.getTitle() + " " + resume.getContacts(ContactType.EMAIL));
-        System.out.println(ContactType.SKYPE.getTitle() + " " + resume.getContacts(ContactType.SKYPE));
-        System.out.println(ContactType.HOME_PAGE.getTitle() + " " + resume.getContacts(ContactType.HOME_PAGE));
-        System.out.println(SectionType.OBJECTIVE.getTitle() + "\n" + resume.getSections(SectionType.OBJECTIVE));
-        System.out.println(SectionType.PERSONAL.getTitle() + "\n" + resume.getSections(SectionType.PERSONAL));
-        System.out.println(SectionType.ACHIEVEMENT.getTitle() + "\n" + resume.getSections(SectionType.ACHIEVEMENT));
-        System.out.println(SectionType.QUALIFICATIONS.getTitle() + "\n" + resume.getSections(SectionType.QUALIFICATIONS));
-        System.out.println(SectionType.EXPERIENCE.getTitle() + "\n" + resume.getSections(SectionType.EXPERIENCE));
-        System.out.println(SectionType.EDUCATION.getTitle() + "\n" + resume.getSections(SectionType.EDUCATION));
+        System.out.println(ContactType.PHONE.getTitle() + " " + resume.getContact(ContactType.PHONE));
+        System.out.println(ContactType.EMAIL.getTitle() + " " + resume.getContact(ContactType.EMAIL));
+        System.out.println(ContactType.SKYPE.getTitle() + " " + resume.getContact(ContactType.SKYPE));
+        System.out.println(ContactType.HOME_PAGE.getTitle() + " " + resume.getContact(ContactType.HOME_PAGE));
+        System.out.println(SectionType.OBJECTIVE.getTitle() + "\n" + resume.getSection(SectionType.OBJECTIVE));
+        System.out.println(SectionType.PERSONAL.getTitle() + "\n" + resume.getSection(SectionType.PERSONAL));
+        System.out.println(SectionType.ACHIEVEMENT.getTitle() + "\n" + resume.getSection(SectionType.ACHIEVEMENT));
+        System.out.println(SectionType.QUALIFICATIONS.getTitle() + "\n" + resume.getSection(SectionType.QUALIFICATIONS));
+        System.out.println(SectionType.EXPERIENCE.getTitle() + "\n" + resume.getSection(SectionType.EXPERIENCE));
+        System.out.println(SectionType.EDUCATION.getTitle() + "\n" + resume.getSection(SectionType.EDUCATION));
     }
 
     public static Resume create(String uuid, String fullName) {

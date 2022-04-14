@@ -2,7 +2,7 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.strategy.InterfaceOfStrategy;
+import com.urise.webapp.storage.serializer.StreamSerializer;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -17,13 +17,13 @@ import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
-    private final InterfaceOfStrategy objectIOStreamStorage;
+    private final StreamSerializer objectIOStreamStorage;
 
-    public PathStorage(String dir, InterfaceOfStrategy objectIOStreamStorage) {
+    public PathStorage(String dir, StreamSerializer objectIOStreamStorage) {
         Objects.requireNonNull(dir, "directory must not be null");
         directory = Paths.get(dir);
         this.objectIOStreamStorage = objectIOStreamStorage;
-        if (directory == null) {
+        if (!Files.isDirectory(directory)) {
             try {
                 Files.createDirectory(directory);
             } catch (IOException e) {

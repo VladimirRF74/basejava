@@ -8,7 +8,10 @@ import java.util.Objects;
 public class OrganizationSection extends AbstractSection {
     @Serial
     private static final long serialVersionUID = 1L;
-    private final List<Organization> organizations;
+    private List<Organization> organizations;
+
+    public OrganizationSection() {
+    }
 
     public OrganizationSection(Organization... organizations) {
         this.organizations = Arrays.asList(organizations);
@@ -19,9 +22,9 @@ public class OrganizationSection extends AbstractSection {
         this.organizations = organizations;
     }
 
-    public List<Organization> getOrganizations() {
-        return organizations;
-    }
+//    public List<Organization> getOrganizations() {
+//        return organizations;
+//    }
 
     @Override
     public boolean equals(Object o) {

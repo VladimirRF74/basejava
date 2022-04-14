@@ -2,7 +2,7 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.strategy.InterfaceOfStrategy;
+import com.urise.webapp.storage.serializer.StreamSerializer;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -11,12 +11,13 @@ import java.util.Objects;
 
 public class FileStorage extends AbstractStorage<File> {
     private final File directory;
-    private final InterfaceOfStrategy objectIOStreamStorage;
+    private final StreamSerializer objectIOStreamStorage;
 
-    protected FileStorage(File directory, InterfaceOfStrategy objectIOStreamStorage) {
+    protected FileStorage(File directory, StreamSerializer objectIOStreamStorage) {
         Objects.requireNonNull(directory, "directory must not be null");
         this.objectIOStreamStorage = objectIOStreamStorage;
-        if (directory.mkdir()) {
+        directory.mkdir();
+        if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
         }
         if (!directory.canRead() || !directory.canWrite()) {
