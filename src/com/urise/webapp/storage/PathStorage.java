@@ -17,12 +17,12 @@ import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
-    private final StreamSerializer objectIOStreamStorage;
+    private final StreamSerializer streamSerializer;
 
-    public PathStorage(String dir, StreamSerializer objectIOStreamStorage) {
+    public PathStorage(String dir, StreamSerializer streamSerializer) {
         Objects.requireNonNull(dir, "directory must not be null");
         directory = Paths.get(dir);
-        this.objectIOStreamStorage = objectIOStreamStorage;
+        this.streamSerializer = streamSerializer;
         if (!Files.isDirectory(directory)) {
             try {
                 Files.createDirectory(directory);
@@ -57,7 +57,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume getResume(Path path) {
         try {
-            return objectIOStreamStorage.doRead(new BufferedInputStream(Files.newInputStream(path)));
+            return streamSerializer.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Path read error", directory.getFileName().toString(), e);
         }
@@ -66,7 +66,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected void updateResume(Path path, Resume resume) {
         try {
-            objectIOStreamStorage.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
+            streamSerializer.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Path write error", resume.getUuid(), e);
         }

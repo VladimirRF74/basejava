@@ -11,6 +11,7 @@ public class JsonParser {
     private static Gson GSON = new GsonBuilder()
             .registerTypeAdapter(AbstractSection.class, new JsonSectionAdapter())
             .create();
+
     public static <T> T read(Reader reader, Class<T> clazz) {
         return GSON.fromJson(reader, clazz);
     }

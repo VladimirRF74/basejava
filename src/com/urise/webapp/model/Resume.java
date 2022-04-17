@@ -34,14 +34,6 @@ public class Resume implements Serializable {
         this.fullName = fullName;
     }
 
-    public void setContacts(Map<ContactType, String> contacts) {
-        this.contacts = contacts;
-    }
-
-    public void setSections(Map<SectionType, AbstractSection> sections) {
-        this.sections = sections;
-    }
-
     public AbstractSection getSection(SectionType type) {
         return sections.get(type);
     }
@@ -54,8 +46,16 @@ public class Resume implements Serializable {
         return sections;
     }
 
+    public void setSections(Map<SectionType, AbstractSection> sections) {
+        this.sections = sections;
+    }
+
     public Map<ContactType, String> getContacts() {
         return contacts;
+    }
+
+    public void setContacts(Map<ContactType, String> contacts) {
+        this.contacts = contacts;
     }
 
     public String getFullName() {
@@ -98,6 +98,6 @@ public class Resume implements Serializable {
 
     @Override
     public String toString() {
-        return uuid + "\n" + fullName;
+        return uuid + "\n" + fullName + "\n" + contacts + "\n" + sections;
     }
 }

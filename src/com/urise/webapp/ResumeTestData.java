@@ -33,8 +33,8 @@ public class ResumeTestData {
         TextSection sectionPersonal = new TextSection("\tАналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры.");
 
         Map<ContactType, String> contacts = new HashMap<>();
-        contacts.put(ContactType.PHONE, "+7(921) 855-0482");
         contacts.put(ContactType.EMAIL, "gkislin@yandex.ru");
+        contacts.put(ContactType.PHONE, "+7(921) 855-0482");
         contacts.put(ContactType.SKYPE, "grigory.kislin");
         contacts.put(ContactType.HOME_PAGE, "Home page");
         resume.setContacts(contacts);
@@ -42,7 +42,7 @@ public class ResumeTestData {
         List<String> listAchievement = new ArrayList<>();
         listAchievement.add("\tС 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)\". Организация онлайн стажировок и ведение проектов. Более 1000 выпускников.\n");
         listAchievement.add("\tРеализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. Интеграция с Twilio, DuoSecurity, Google Authenticator, Jira, Zendesk.\n");
-        listAchievement.add("\tНалаживание процесса разработки и непрерывной интеграции ERP системы River BPM. Интеграция с 1С, Bonita BPM, CMIS, LDAP. Разработка приложения управления окружением на стеке: Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных ERP модулей, интеграция CIFS/SMB java сервера.");
+        //listAchievement.add("\tНалаживание процесса разработки и непрерывной интеграции ERP системы River BPM. Интеграция с 1С, Bonita BPM, CMIS, LDAP. Разработка приложения управления окружением на стеке: Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных ERP модулей, интеграция CIFS/SMB java сервера.");
 
         List<String> listQualifications = new ArrayList<>();
         listQualifications.add("\tJEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2\n");
@@ -77,8 +77,8 @@ public class ResumeTestData {
                         LocalDate.of(1993, 7, 1),
                         "Инженер (программист Fortran, C)", "")));
 
-        sections.put(SectionType.OBJECTIVE, sectionObjective);
         sections.put(SectionType.PERSONAL, sectionPersonal);
+        sections.put(SectionType.OBJECTIVE, sectionObjective);
         sections.put(SectionType.ACHIEVEMENT, new ListSection(listAchievement));
         sections.put(SectionType.QUALIFICATIONS, new ListSection(listQualifications));
         sections.put(SectionType.EXPERIENCE, new OrganizationSection(listExperience));
