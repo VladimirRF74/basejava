@@ -1,12 +1,8 @@
 package com.urise.webapp;
 
-import com.urise.webapp.model.*;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.urise.webapp.model.ContactType;
+import com.urise.webapp.model.Resume;
+import com.urise.webapp.model.SectionType;
 
 public class ResumeTestData {
     public static void main(String[] args) {
@@ -28,7 +24,7 @@ public class ResumeTestData {
 
     public static Resume create(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-        Map<SectionType, AbstractSection> sections = new HashMap<>();
+        /*Map<SectionType, AbstractSection> sections = new HashMap<>();
         TextSection sectionObjective = new TextSection("\tВедущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
         TextSection sectionPersonal = new TextSection("\tАналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры.");
 
@@ -83,7 +79,7 @@ public class ResumeTestData {
         sections.put(SectionType.QUALIFICATIONS, new ListSection(listQualifications));
         sections.put(SectionType.EXPERIENCE, new OrganizationSection(listExperience));
         sections.put(SectionType.EDUCATION, new OrganizationSection(listEducation));
-        resume.setSections(sections);
+        resume.setSections(sections);*/
         return resume;
     }
 }
