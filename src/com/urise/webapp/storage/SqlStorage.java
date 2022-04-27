@@ -20,7 +20,7 @@ public class SqlStorage implements Storage{
     @Override
     public void clear() {
         String sql = "DELETE FROM resume";
-        doDb(preparedStatement -> {}, sql);
+        doDb(preparedStatement -> null, sql);
         /*try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.execute();
@@ -47,6 +47,7 @@ public class SqlStorage implements Storage{
         doDb(preparedStatement -> {
             preparedStatement.setString(2, resume.getUuid());
             preparedStatement.setString(1, resume.getFullName());
+            return null;
         }, sql);
         /*try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement("UPDATE resume SET full_name = ? WHERE uuid = ?")) {
@@ -59,8 +60,18 @@ public class SqlStorage implements Storage{
     }
 
     @Override
-    public Resume get(String uuid) {
-        try (Connection conn = connectionFactory.getConnection();
+    public Resume get(String uuid) throws SQLException {
+        String sql = "SELECT * FROM resume WHERE uuid = ?";
+        return doDb(ps -> {
+            ps.setString(1, uuid);
+            ResultSet rs = ps.executeQuery();
+            if (!rs.next()) {
+                throw new NotExistStorageException(uuid);
+            }
+            return new Resume(uuid, rs.getString("full_name"));
+        }, sql);
+
+        /*try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume WHERE uuid = ?")) {
             ps.setString(1, uuid);
             ResultSet rs = ps.executeQuery();
@@ -70,12 +81,20 @@ public class SqlStorage implements Storage{
             return new Resume(uuid, rs.getString("full_name"));
         } catch (SQLException e) {
             throw new StorageException(e.getMessage());
-        }
+        }*/
     }
 
     @Override
     public void delete(String uuid) {
-        try (Connection conn = connectionFactory.getConnection();
+        String sql = "DELETE FROM resume WHERE uuid = ?";
+        doDb(ps -> {
+            ps.setString(1, uuid);
+            if (ps.executeUpdate() == 0) {
+                throw new NotExistStorageException(uuid);
+            }
+            return null;
+        }, sql);
+        /*try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement("DELETE FROM resume WHERE uuid = ?")) {
             ps.setString(1, uuid);
             if (ps.executeUpdate() == 0) {
@@ -83,13 +102,25 @@ public class SqlStorage implements Storage{
             }
         } catch (SQLException e) {
             throw new StorageException(uuid, e.getMessage());
-        }
+        }*/
     }
 
     @Override
     public List<Resume> getAllSorted() {
         List<Resume> resumeList = new ArrayList<>();
-        try (Connection conn = connectionFactory.getConnection();
+        String sql = "SELECT * FROM resume";
+        return doDb(ps -> {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String uuid = rs.getString("uuid");
+                String fullName = rs.getString("full_name");
+                Resume resume = new Resume(uuid, fullName);
+                resumeList.add(resume);
+            }
+            resumeList.sort(AbstractStorage.RESUME_FULLNAME_UUID_COMPARATOR);
+            return resumeList;
+        }, sql);
+        /*try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume")) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -102,13 +133,21 @@ public class SqlStorage implements Storage{
             return resumeList;
         } catch (SQLException e) {
             throw new StorageException(e.getMessage());
-        }
+        }*/
     }
 
     @Override
     public int getSize() {
-        int count = 0;
-        try (Connection conn = connectionFactory.getConnection();
+        String sql = "SELECT * FROM resume";
+        final int[] count = {0};
+        return doDb(ps -> {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                count[0]++;
+            }
+            return count[0];
+        }, sql);
+        /*try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume")) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -117,18 +156,19 @@ public class SqlStorage implements Storage{
             return count;
         } catch (SQLException e) {
             throw new StorageException(e.getMessage());
-        }
+        }*/
     }
 
-    interface BlockCode {
-        void doing(PreparedStatement ps) throws SQLException;
+    interface BlockCode<T> {
+        T doing(PreparedStatement ps) throws SQLException;
     }
 
-    private void doDb(BlockCode blockCode, String sql) {
+    private <T> T doDb(BlockCode<T> blockCode, String sql) {
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            blockCode.doing(ps);
+            T value = blockCode.doing(ps);
             ps.execute();
+            return value;
         } catch (SQLException e) {
             throw new StorageException(e.getMessage());
         }

@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void save() {
+    public void save() throws SQLException {
         Resume resume = RESUME_4;
         storage.save(resume);
         assertEquals(4, storage.getSize());
@@ -58,19 +59,19 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void update() {
+    public void update() throws SQLException {
         storage.update(RESUME_2);
         assertEquals(3, storage.getSize());
         assertEquals(RESUME_2, storage.get(UUID_2));
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void updateNotExist() {
+    public void updateNotExist() throws SQLException {
         storage.get("dummy");
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void delete() {
+    public void delete() throws SQLException {
         storage.delete(UUID_1);
         assertEquals(2, storage.getSize());
         storage.get(UUID_1);
@@ -82,12 +83,12 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void get() {
+    public void get() throws SQLException {
         assertEquals(RESUME_1, storage.get(UUID_1));
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void getNotExist() {
+    public void getNotExist() throws SQLException {
         storage.get("dummy");
     }
 
