@@ -1,26 +1,30 @@
 package com.urise.webapp.sql;
 
-import com.urise.webapp.exception.StorageException;
+import com.urise.webapp.exception.ExistStorageException;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class SqlHelper {
-    public final ConnectionFactory connectionFactory;
+    private final ConnectionFactory connectionFactory;
 
-    public SqlHelper(String dbUrl, String dbUser, String dbPassword) {
-        connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+    public SqlHelper(ConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
     }
 
-    public void transaction(String sql) {
+    public <T> T connectDb(String sql, BlockCode<T> blockCode) {
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-
-        } catch (
-                SQLException e) {
-            throw new StorageException(e.getMessage());
+            T value = blockCode.doing(ps);
+            ps.execute();
+            return value;
+        } catch (SQLException e) {
+            throw new ExistStorageException(e.getMessage());
         }
+    }
+
+    public interface BlockCode<T> {
+        T doing(PreparedStatement ps) throws SQLException;
     }
 }
