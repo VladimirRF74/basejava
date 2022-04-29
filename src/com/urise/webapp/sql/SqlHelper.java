@@ -13,7 +13,7 @@ public class SqlHelper {
         this.connectionFactory = connectionFactory;
     }
 
-    public <T> T connectDb(String sql, BlockCode<T> blockCode) {
+    public <T> T executeRequest(String sql, BlockCode<T> blockCode) {
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             T value = blockCode.doing(ps);

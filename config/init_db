@@ -14,7 +14,7 @@ create unique index resume_uuid_uindex
 
 create table contact
 (
-    id serial,
+    id          serial,
     resume_uuid char(36) not null
         constraint "contact_resume _uuid_fk"
             references resume

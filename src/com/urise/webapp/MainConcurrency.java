@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainConcurrency {
-    private static int counter;
     private static final Object LOCK = new Object();
+    private static int counter;
 
     public static void main(String[] args) {
 
