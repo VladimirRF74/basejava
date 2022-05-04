@@ -11,7 +11,7 @@ import java.util.Map;
 public class ResumeTestData {
     public static void main(String[] args) {
         Resume resume = new Resume("Pieter Pen");
-        resume = create(resume.getUuid(), resume.getFullName());
+        resume = create(resume.getFullName());
 
         System.out.println(resume);
         System.out.println(ContactType.PHONE.getTitle() + " " + resume.getContact(ContactType.PHONE));
@@ -26,8 +26,8 @@ public class ResumeTestData {
         System.out.println(SectionType.EDUCATION.getTitle() + "\n" + resume.getSection(SectionType.EDUCATION));
     }
 
-    public static Resume create(String uuid, String fullName) {
-        Resume resume = new Resume(uuid, fullName);
+    public static Resume create(String fullName) {
+        Resume resume = new Resume(fullName);
         Map<SectionType, AbstractSection> sections = new HashMap<>();
 
         Map<ContactType, String> contacts = new HashMap<>();

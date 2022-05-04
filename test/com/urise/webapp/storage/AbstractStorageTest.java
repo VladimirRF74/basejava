@@ -18,14 +18,10 @@ import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
     protected static final File STORAGE_DIR = Config.get().getStorageDir();
-    private static final String UUID_1 = "uuid1";
-    private static final Resume RESUME_1 = ResumeTestData.create(UUID_1, "Donald Duck");
-    private static final String UUID_2 = "uuid2";
-    private static final Resume RESUME_2 = ResumeTestData.create(UUID_2, "Peter Pen");
-    private static final String UUID_3 = "uuid3";
-    private static final Resume RESUME_3 = ResumeTestData.create(UUID_3, "Donald Duck");
-    private static final String UUID_4 = "uuid4";
-    private static final Resume RESUME_4 = ResumeTestData.create(UUID_4, "Micky Mouse");
+    private static final Resume RESUME_1 = ResumeTestData.create("Donald Duck");
+    private static final Resume RESUME_2 = ResumeTestData.create("Peter Pen");
+    private static final Resume RESUME_3 = ResumeTestData.create("Donald Duck");
+    private static final Resume RESUME_4 = ResumeTestData.create("Micky Mouse");
     protected final Storage storage;
 
     protected AbstractStorageTest(Storage storage) {
@@ -61,14 +57,13 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() throws SQLException {
-        Resume newResume = new Resume(UUID_2, "New Name");
+        Resume newResume = new Resume(RESUME_2.getUuid(),"New Name");
         newResume.addContact(ContactType.EMAIL, "mail1@google.com");
         newResume.addContact(ContactType.SKYPE, "NewSkype");
         newResume.addContact(ContactType.PHONE, "+7 921 222-22-22");
-        newResume.addContact(ContactType.HOME_PAGE, "New home page");
         storage.update(newResume);
         assertEquals(3, storage.getSize());
-        assertEquals(newResume, storage.get(UUID_2));
+        assertEquals(newResume, storage.get(RESUME_2.getUuid()));
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -78,9 +73,9 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void delete() throws SQLException {
-        storage.delete(UUID_1);
+        storage.delete(RESUME_1.getUuid());
         assertEquals(2, storage.getSize());
-        storage.get(UUID_1);
+        storage.get(RESUME_1.getUuid());
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -90,7 +85,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void get() throws SQLException {
-        assertEquals(RESUME_1, storage.get(UUID_1));
+        assertEquals(RESUME_1, storage.get(RESUME_1.getUuid()));
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -107,8 +102,9 @@ public abstract class AbstractStorageTest {
     public void getAllSorted() {
         List<Resume> expected = new ArrayList<>();
         expected.add(RESUME_1);
-        expected.add(RESUME_3);
         expected.add(RESUME_2);
+        expected.add(RESUME_3);
+        expected.sort(AbstractStorage.RESUME_FULLNAME_UUID_COMPARATOR);
         List<Resume> actual = storage.getAllSorted();
         assertEquals(expected, actual);
     }
