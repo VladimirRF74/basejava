@@ -1,8 +1,12 @@
 package com.urise.webapp;
 
+import com.urise.webapp.model.AbstractSection;
 import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.model.SectionType;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ResumeTestData {
     public static void main(String[] args) {
@@ -24,9 +28,7 @@ public class ResumeTestData {
 
     public static Resume create(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-        /*Map<SectionType, AbstractSection> sections = new HashMap<>();
-        TextSection sectionObjective = new TextSection("\tВедущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
-        TextSection sectionPersonal = new TextSection("\tАналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры.");
+        Map<SectionType, AbstractSection> sections = new HashMap<>();
 
         Map<ContactType, String> contacts = new HashMap<>();
         contacts.put(ContactType.EMAIL, "gkislin@yandex.ru");
@@ -34,6 +36,9 @@ public class ResumeTestData {
         contacts.put(ContactType.SKYPE, "grigory.kislin");
         contacts.put(ContactType.HOME_PAGE, "Home page");
         resume.setContacts(contacts);
+
+        /*TextSection sectionObjective = new TextSection("\tВедущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
+        TextSection sectionPersonal = new TextSection("\tАналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры.");
 
         List<String> listAchievement = new ArrayList<>();
         listAchievement.add("\tС 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)\". Организация онлайн стажировок и ведение проектов. Более 1000 выпускников.\n");
