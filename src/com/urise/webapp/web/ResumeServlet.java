@@ -30,23 +30,23 @@ public class ResumeServlet extends HttpServlet {
         Writer writer = response.getWriter();
         writer.write(
                 "<html>\n" +
-                "<style>\n" +
-                "table, th, td {\n" +
-                "  border:1px solid black;\n" +
-                "}\n" +
-                "</style>\n" +
-                "<body>\n" +
-                "\n" +
-                "<h2>Список всех резюме</h2>\n" +
-                "\n" +
-                "<table>\n" +
-                "  <tr>\n" +
-                "    <th>UUID</th>\n" +
-                "    <th>Fullname</th>\n" +
-                "  </tr>\n");
+                        "<style>\n" +
+                        "table, th, td {\n" +
+                        "  border:1px solid black;\n" +
+                        "}\n" +
+                        "</style>\n" +
+                        "<body>\n" +
+                        "\n" +
+                        "<h2>Список всех резюме</h2>\n" +
+                        "\n" +
+                        "<table>\n" +
+                        "  <tr>\n" +
+                        "    <th>UUID</th>\n" +
+                        "    <th>Fullname</th>\n" +
+                        "  </tr>\n");
         for (Resume resume : storage.getAllSorted()) {
             writer.write(
-                        "<tr>\n" +
+                    "<tr>\n" +
                             "     <td>" + resume.getUuid() + "</td>\n" +
                             "     <td>" + resume.getFullName() + "</td>\n" +
                             "</tr>\n");
