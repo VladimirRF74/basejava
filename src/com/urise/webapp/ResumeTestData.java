@@ -10,7 +10,7 @@ public class ResumeTestData {
         resume = create(resume.getFullName());
 
         System.out.println(resume);
-        System.out.println(ContactType.PHONE.getTitle() + " " + resume.getContact(ContactType.PHONE));
+        /*System.out.println(ContactType.PHONE.getTitle() + " " + resume.getContact(ContactType.PHONE));
         System.out.println(ContactType.EMAIL.getTitle() + " " + resume.getContact(ContactType.EMAIL));
         System.out.println(ContactType.SKYPE.getTitle() + " " + resume.getContact(ContactType.SKYPE));
         System.out.println(ContactType.HOME_PAGE.getTitle() + " " + resume.getContact(ContactType.HOME_PAGE));
@@ -19,7 +19,7 @@ public class ResumeTestData {
         System.out.println(SectionType.ACHIEVEMENT.getTitle() + "\n" + resume.getSection(SectionType.ACHIEVEMENT));
         System.out.println(SectionType.QUALIFICATIONS.getTitle() + "\n" + resume.getSection(SectionType.QUALIFICATIONS));
         System.out.println(SectionType.EXPERIENCE.getTitle() + "\n" + resume.getSection(SectionType.EXPERIENCE));
-        System.out.println(SectionType.EDUCATION.getTitle() + "\n" + resume.getSection(SectionType.EDUCATION));
+        System.out.println(SectionType.EDUCATION.getTitle() + "\n" + resume.getSection(SectionType.EDUCATION));*/
     }
 
     public static Resume create(String fullName) {
@@ -33,18 +33,18 @@ public class ResumeTestData {
         contacts.put(ContactType.HOME_PAGE, "Home page");
         resume.setContacts(contacts);
 
-        TextSection sectionObjective = new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям\n");
-        TextSection sectionPersonal = new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры.\n");
+        TextSection sectionObjective = new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
+        TextSection sectionPersonal = new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры.");
 
         List<String> listAchievement = new ArrayList<>();
-        listAchievement.add("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)\". Организация онлайн стажировок и ведение проектов. Более 1000 выпускников.\n");
-        listAchievement.add("Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. Интеграция с Twilio, DuoSecurity, Google Authenticator, Jira, Zendesk.\n");
-        //listAchievement.add("\tНалаживание процесса разработки и непрерывной интеграции ERP системы River BPM. Интеграция с 1С, Bonita BPM, CMIS, LDAP. Разработка приложения управления окружением на стеке: Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных ERP модулей, интеграция CIFS/SMB java сервера.\n");
+        listAchievement.add("Text-1.");
+        listAchievement.add("Text-2.");
+        listAchievement.add("Text-3.");
 
         List<String> listQualifications = new ArrayList<>();
-        listQualifications.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2\n");
-        listQualifications.add("Version control: Subversion, Git, Mercury, ClearCase, Perforce\n");
-        listQualifications.add("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle\n");
+        listQualifications.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
+        listQualifications.add("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
+        listQualifications.add("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle");
 
         List<Organization> listExperience = new ArrayList<>();
 //        listExperience.add(new Organization("Java Online Projects", "JavaOnlineProjects.com",
@@ -77,7 +77,7 @@ public class ResumeTestData {
         sections.put(SectionType.PERSONAL, sectionPersonal);
         sections.put(SectionType.OBJECTIVE, sectionObjective);
         sections.put(SectionType.ACHIEVEMENT, new ListSection(listAchievement));
-//        sections.put(SectionType.QUALIFICATIONS, new ListSection(listQualifications));
+        sections.put(SectionType.QUALIFICATIONS, new ListSection(listQualifications));
 //        sections.put(SectionType.EXPERIENCE, new OrganizationSection(listExperience));
 //        sections.put(SectionType.EDUCATION, new OrganizationSection(listEducation));
         resume.setSections(sections);

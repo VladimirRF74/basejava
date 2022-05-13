@@ -37,9 +37,13 @@ public class SqlStorage implements Storage {
             try (PreparedStatement ps = conn.prepareStatement(
                     "INSERT INTO section (resume_uuid, type, content) VALUES (?,?,?)")) {
                 for (Map.Entry<SectionType, AbstractSection> entry : resume.getSections().entrySet()) {
+                    SectionType type = entry.getKey();
                     ps.setString(1, resume.getUuid());
-                    ps.setString(2, entry.getKey().name());
-                    ps.setString(3, String.valueOf(entry.getValue()));
+                    ps.setString(2, type.name());
+                    switch (type) {
+                        case PERSONAL, OBJECTIVE -> ps.setString(3, String.valueOf(entry.getValue()));
+                        case ACHIEVEMENT, QUALIFICATIONS -> ps.setString(3, addSection(entry.getValue()));
+                    }
                     ps.addBatch();
                 }
                 ps.executeBatch();
@@ -58,7 +62,7 @@ public class SqlStorage implements Storage {
     public Resume get(String uuid) throws SQLException {
         return sqlHelper.transactionExecute(conn -> {
             Resume resume;
-            Map<SectionType, AbstractSection> map = new EnumMap<>(SectionType.class);
+            Map<SectionType, AbstractSection> sectionMap = new EnumMap<>(SectionType.class);
             try (PreparedStatement ps = conn.prepareStatement(
                     "SELECT * FROM resume r LEFT JOIN contact c on r.uuid = c.resume_uuid WHERE r.uuid = ?")) {
                 ps.setString(1, uuid);
@@ -78,16 +82,23 @@ public class SqlStorage implements Storage {
                 ps.setString(1, uuid);
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
-                    String value = rs.getString("content");
-                    SectionType type = SectionType.valueOf(rs.getString("type"));
-                    if (value != null) {
-                        System.out.println(value);
-                        resume.addSection(type, new TextSection(value));
-                    }
+                    selectSection(resume, rs);
                 }
             }
             return resume;
         });
+    }
+
+    private void selectSection(Resume resume, ResultSet rs) throws SQLException {
+        String value = rs.getString("content");
+        SectionType type = SectionType.valueOf(rs.getString("type"));
+        if (value != null) {
+            switch (type) {
+                case PERSONAL, OBJECTIVE -> resume.addSection(type, new TextSection(value));
+                case ACHIEVEMENT, QUALIFICATIONS -> resume.addSection(type, getSectionValue(value));
+                default -> throw new IllegalStateException("Unexpected value: " + type);
+            }
+        }
     }
 
     @Override
@@ -129,10 +140,7 @@ public class SqlStorage implements Storage {
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     Resume r = map.get(rs.getString("resume_uuid"));
-                    String value = rs.getString("content");
-                    if (value != null) {
-                        r.addSection(SectionType.valueOf(rs.getString("type")), new TextSection(value));
-                    }
+                    selectSection(r, rs);
                 }
             }
             return new ArrayList<>(map.values());
@@ -158,5 +166,23 @@ public class SqlStorage implements Storage {
             }
             ps.executeBatch();
         }
+    }
+    private ListSection getSectionValue(String value) {
+        String[] row = value.split("\n");
+        List<String> list = new ArrayList<>();
+        for (String s : row) {
+            list.add(s);
+        }
+        return new ListSection(list);
+    }
+
+    private String addSection(AbstractSection value) {
+        ListSection ls = (ListSection) value;
+        List<String> list = ls.getItems();
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            builder.append(i < list.size() - 1 ? list.get(i).concat("\n") : list.get(i));
+        }
+        return builder.toString();
     }
 }

@@ -85,7 +85,6 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void get() throws SQLException {
-        assertEquals(RESUME_1.getSections(), storage.get(RESUME_1.getUuid()).getSections());
         assertEquals(RESUME_1, storage.get(RESUME_1.getUuid()));
     }
 

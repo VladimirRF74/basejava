@@ -14,6 +14,7 @@ public class ListSection extends AbstractSection {
     }
 
     public ListSection(String... items) {
+        Objects.requireNonNull(items, "items must not be null");
         this.items = Arrays.asList(items);
     }
 
