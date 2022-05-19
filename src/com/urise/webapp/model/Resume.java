@@ -34,6 +34,10 @@ public class Resume implements Serializable {
         this.fullName = fullName;
     }
 
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     public AbstractSection getSection(SectionType type) {
         return sections.get(type);
     }

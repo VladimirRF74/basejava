@@ -2,6 +2,7 @@ package com.urise.webapp;
 
 import com.urise.webapp.model.*;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class ResumeTestData {
@@ -47,39 +48,39 @@ public class ResumeTestData {
         listQualifications.add("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle");
 
         List<Organization> listExperience = new ArrayList<>();
-//        listExperience.add(new Organization("Java Online Projects", "JavaOnlineProjects.com",
-//                new Organization.Specialisation(LocalDate.of(2013, 10, 1),
-//                        LocalDate.now(), "Автор проекта.",
-//                        "Создание, организация и проведение Java онлайн проектов и стажировок.")));
-//
-//        listExperience.add(new Organization("Wrike", "wrike.com",
-//                new Organization.Specialisation(LocalDate.of(2013, 10, 1),
-//                        LocalDate.of(2016, 1, 1),
-//                        "Старший разработчик (backend)",
-//                        "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API," +
-//                                " Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis)." +
-//                                " Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.")));
-//
+        listExperience.add(new Organization("Java Online Projects", "JavaOnlineProjects.com",
+                new Organization.Specialisation(LocalDate.of(2013, 10, 1),
+                        LocalDate.now(), "Автор проекта.",
+                        "Создание, организация и проведение Java онлайн проектов и стажировок.")));
+
+        listExperience.add(new Organization("Wrike", "wrike.com",
+                new Organization.Specialisation(LocalDate.of(2013, 10, 1),
+                        LocalDate.of(2016, 1, 1),
+                        "Старший разработчик (backend)",
+                        "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API," +
+                                " Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis)." +
+                                " Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.")));
+
         List<Organization> listEducation = new ArrayList<>();
-//        listEducation.add(new Organization("Coursera", "coursera.com",
-//                new Organization.Specialisation(LocalDate.of(2013, 3, 1),
-//                        LocalDate.of(2013, 5, 1),
-//                        "Functional Programming Principles in Scala by Martin Odersky", "")));
-//
-//        listEducation.add(new Organization("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
-//                "link.com", new Organization.Specialisation(LocalDate.of(1993, 3, 1),
-//                LocalDate.of(1996, 9, 1),
-//                "Аспирантура (программист С, С++)", ""),
-//                new Organization.Specialisation(LocalDate.of(1987, 8, 1),
-//                        LocalDate.of(1993, 7, 1),
-//                        "Инженер (программист Fortran, C)", "")));
+        listEducation.add(new Organization("Coursera", "coursera.com",
+                new Organization.Specialisation(LocalDate.of(2013, 3, 1),
+                        LocalDate.of(2013, 5, 1),
+                        "Functional Programming Principles in Scala by Martin Odersky", "")));
+
+        listEducation.add(new Organization("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
+                "link.com", new Organization.Specialisation(LocalDate.of(1993, 3, 1),
+                LocalDate.of(1996, 9, 1),
+                "Аспирантура (программист С, С++)", ""),
+                new Organization.Specialisation(LocalDate.of(1987, 8, 1),
+                        LocalDate.of(1993, 7, 1),
+                        "Инженер (программист Fortran, C)", "")));
 
         sections.put(SectionType.PERSONAL, sectionPersonal);
         sections.put(SectionType.OBJECTIVE, sectionObjective);
         sections.put(SectionType.ACHIEVEMENT, new ListSection(listAchievement));
         sections.put(SectionType.QUALIFICATIONS, new ListSection(listQualifications));
-//        sections.put(SectionType.EXPERIENCE, new OrganizationSection(listExperience));
-//        sections.put(SectionType.EDUCATION, new OrganizationSection(listEducation));
+        sections.put(SectionType.EXPERIENCE, new OrganizationSection(listExperience));
+        sections.put(SectionType.EDUCATION, new OrganizationSection(listEducation));
         resume.setSections(sections);
         return resume;
     }
