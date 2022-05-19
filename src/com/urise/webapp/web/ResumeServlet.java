@@ -54,14 +54,8 @@ public class ResumeServlet extends HttpServlet {
                 for (SectionType type : SectionType.values()) {
                     if (resume.getSection(type) == null) {
                         switch (type) {
-                            case OBJECTIVE, PERSONAL -> {
-                                resume.addSection(type, new TextSection("No text"));
-                                break;
-                            }
-                            case ACHIEVEMENT, QUALIFICATIONS -> {
-                                resume.addSection(type, new ListSection("No text"));
-                                break;
-                            }
+                            case OBJECTIVE, PERSONAL -> resume.addSection(type, new TextSection("No text"));
+                            case ACHIEVEMENT, QUALIFICATIONS -> resume.addSection(type, new ListSection("No text"));
                         }
                     }
                 }
@@ -74,20 +68,11 @@ public class ResumeServlet extends HttpServlet {
                     }
                     for (SectionType type : SectionType.values()) {
                         switch (type) {
-                            case OBJECTIVE, PERSONAL -> {
-                                resume.addSection(type, new TextSection("No text"));
-                                break;
-                            }
-                            case ACHIEVEMENT, QUALIFICATIONS -> {
-                                resume.addSection(type, new ListSection("No text"));
-                                break;
-                            }
-                            case EDUCATION, EXPERIENCE -> {
-                                resume.addSection(type, new OrganizationSection(new ArrayList<>()));
-                            }
+                            case OBJECTIVE, PERSONAL -> resume.addSection(type, new TextSection("No text"));
+                            case ACHIEVEMENT, QUALIFICATIONS -> resume.addSection(type, new ListSection("No text"));
+                            case EDUCATION, EXPERIENCE -> resume.addSection(type, new OrganizationSection(new ArrayList<>()));
                         }
                     }
-                    //storage.save(resume);
                 }
                 break;
             default:
@@ -140,7 +125,6 @@ public class ResumeServlet extends HttpServlet {
             storage.update(resume);
         } else {
             resume = new Resume(uuid, fullName);
-            //resume.setFullName(fullName);
             doSaveUpdate(request, resume);
             for (SectionType type : SectionType.values()) {
                 String value = request.getParameter(type.name().trim());
@@ -148,18 +132,9 @@ public class ResumeServlet extends HttpServlet {
                     resume.getSections().remove(type);
                 } else {
                     switch (type) {
-                        case OBJECTIVE:
-                        case PERSONAL:
-                            resume.addSection(type, new TextSection(value));
-                            break;
-                        case ACHIEVEMENT:
-                        case QUALIFICATIONS:
-                            resume.addSection(type, new ListSection(value.split("\\n")));
-                            break;
-                        case EDUCATION:
-                        case EXPERIENCE:
-                            resume.addSection(type, new OrganizationSection(new ArrayList<>()));
-                            break;
+                        case OBJECTIVE, PERSONAL -> resume.addSection(type, new TextSection(value));
+                        case ACHIEVEMENT, QUALIFICATIONS -> resume.addSection(type, new ListSection(value.split("\\n")));
+                        case EDUCATION, EXPERIENCE -> resume.addSection(type, new OrganizationSection(new ArrayList<>()));
                     }
                 }
             }
