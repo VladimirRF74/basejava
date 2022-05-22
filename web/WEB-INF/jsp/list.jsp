@@ -10,7 +10,7 @@
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <div>
-    <a href="resume?action=new">Create</a>
+    <a href="resume?action=new">Create new resume</a>
 </div><br>
 <section>
     <table>

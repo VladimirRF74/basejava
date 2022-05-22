@@ -1,7 +1,6 @@
 package com.urise.webapp.web;
 
 import com.urise.webapp.Config;
-import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.*;
 import com.urise.webapp.storage.Storage;
 
@@ -11,9 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ResumeServlet extends HttpServlet {
     private final Storage storage = Config.get().getStorage();
@@ -39,18 +36,10 @@ public class ResumeServlet extends HttpServlet {
                 response.sendRedirect("resume");
                 return;
             case "view":
-                try {
-                    resume = storage.get(uuid);
-                } catch (SQLException e) {
-                    throw new StorageException(uuid, e.getMessage());
-                }
+                resume = storage.get(uuid);
                 break;
             case "edit":
-                try {
-                    resume = storage.get(uuid);
-                } catch (SQLException e) {
-                    throw new StorageException(uuid, e.getMessage());
-                }
+                resume = storage.get(uuid);
                 for (SectionType type : SectionType.values()) {
                     if (resume.getSection(type) == null) {
                         switch (type) {
@@ -62,7 +51,7 @@ public class ResumeServlet extends HttpServlet {
                 break;
             case "new":
                 if (uuid == null) {
-                    resume = new Resume("");
+                    resume = new Resume();
                     for (ContactType type : ContactType.values()) {
                         resume.addContact(type, "No text");
                     }
@@ -86,58 +75,17 @@ public class ResumeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
-        System.out.println(uuid);
         String fullName = request.getParameter("fullName").trim();
         Resume resume;
-        List<Resume> ls = storage.getAllSorted();
-        List<String> stringList = new ArrayList<>();
-        for (Resume s : ls) {
-            stringList.add(s.getUuid());
-        }
-        if (stringList.contains(uuid)) {
-            try {
-                resume = storage.get(uuid);
-            } catch (SQLException e) {
-                throw new StorageException(uuid, e.getMessage());
-            }
+        assert uuid != null;
+        if (uuid.trim().length() != 0) {
+            resume = storage.get(uuid);
             resume.setFullName(fullName);
             doSaveUpdate(request, resume);
-            for (SectionType type : SectionType.values()) {
-                String value = request.getParameter(type.name().trim());
-                if (value == null || value.length() == 0) {
-                    resume.getSections().remove(type);
-                } else {
-                    switch (type) {
-                        case OBJECTIVE:
-                        case PERSONAL:
-                            resume.addSection(type, new TextSection(value));
-                            break;
-                        case ACHIEVEMENT:
-                        case QUALIFICATIONS:
-                            resume.addSection(type, new ListSection(value.split("\\n")));
-                            break;
-                        case EDUCATION:
-                        case EXPERIENCE:
-                            break;
-                    }
-                }
-            }
             storage.update(resume);
         } else {
-            resume = new Resume(uuid, fullName);
+            resume = new Resume(fullName);
             doSaveUpdate(request, resume);
-            for (SectionType type : SectionType.values()) {
-                String value = request.getParameter(type.name().trim());
-                if (value == null || value.length() == 0) {
-                    resume.getSections().remove(type);
-                } else {
-                    switch (type) {
-                        case OBJECTIVE, PERSONAL -> resume.addSection(type, new TextSection(value));
-                        case ACHIEVEMENT, QUALIFICATIONS -> resume.addSection(type, new ListSection(value.split("\\n")));
-                        case EDUCATION, EXPERIENCE -> resume.addSection(type, new OrganizationSection(new ArrayList<>()));
-                    }
-                }
-            }
             storage.save(resume);
         }
         response.sendRedirect("resume");
@@ -150,6 +98,18 @@ public class ResumeServlet extends HttpServlet {
                 resume.addContact(type, value);
             } else {
                 resume.getContacts().remove(type);
+            }
+        }
+        for (SectionType type : SectionType.values()) {
+            String value = request.getParameter(type.name().trim());
+            if (value == null || value.length() == 0) {
+                resume.getSections().remove(type);
+            } else {
+                switch (type) {
+                    case OBJECTIVE, PERSONAL -> resume.addSection(type, new TextSection(value));
+                    case ACHIEVEMENT, QUALIFICATIONS -> resume.addSection(type, new ListSection(value.split("\\n")));
+                    case EDUCATION, EXPERIENCE -> resume.addSection(type, new OrganizationSection(new ArrayList<>()));
+                }
             }
         }
     }

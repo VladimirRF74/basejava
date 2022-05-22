@@ -2,7 +2,6 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface Storage {
@@ -13,7 +12,7 @@ public interface Storage {
 
     void update(Resume resume);
 
-    Resume get(String uuid) throws SQLException;
+    Resume get(String uuid);
 
     void delete(String uuid);
 
