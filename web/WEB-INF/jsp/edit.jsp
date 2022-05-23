@@ -18,7 +18,7 @@
         <dl>
             <dt>Имя:</dt>
             <dd><label>
-                <input type="text" name="fullName" size=50 value="${resume.fullName}" required>
+                <input type="text" name="fullName" pattern="[a-zA-Zа-яёА-ЯЁ].{2,}" title="2 или более символов" size=50 value="${resume.fullName}" required>
             </label></dd>
         </dl>
         <h3>Контакты:</h3>
