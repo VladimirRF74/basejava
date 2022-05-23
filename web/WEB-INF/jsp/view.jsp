@@ -31,69 +31,70 @@
         <c:set var="section" value="${sectionEntry.value}"></c:set>
         <jsp:useBean id="section" type="com.urise.webapp.model.AbstractSection"></jsp:useBean>
 
-            <th><h3><a id="type.name">${type.title}</a></h3></th>
+        <th><h3><a id="type.name">${type.title}</a></h3></th>
+        <td>
+        <c:if test="${type=='OBJECTIVE'}">
             <td>
-                <c:if test="${type=='OBJECTIVE'}">
-                    <td>
-                        <ul><a><%=((TextSection) section).getContent()%></a></ul>
-                    </td>
-                </c:if>
+                <ul><a><%=((TextSection) section).getContent()%>
+                </a></ul>
             </td>
+        </c:if>
+        <td>
+        <c:if test="${type=='PERSONAL'}">
             <td>
-                <c:if test="${type=='PERSONAL'}">
-                    <td>
-                        <ul><a><%=((TextSection) section).getContent()%></a></ul>
-                    </td>
-                </c:if>
+                <ul><a><%=((TextSection) section).getContent()%>
+                </a></ul>
             </td>
+        </c:if>
+        <td>
+        <c:if test="${type=='ACHIEVEMENT'}">
             <td>
-                <c:if test="${type=='ACHIEVEMENT'}">
-                    <td>
-                        <c:forEach var="itemA" items="<%=((ListSection) section).getItems()%>">
-                            <ul><li>${itemA}</li></ul>
+                <c:forEach var="itemA" items="<%=((ListSection) section).getItems()%>">
+                    <ul>
+                        <li>${itemA}</li>
+                    </ul>
+                </c:forEach>
+            </td>
+        </c:if>
+        <td>
+        <c:if test="${type=='QUALIFICATIONS'}">
+            <td>
+                <c:forEach var="itemQ" items="<%=((ListSection) section).getItems()%>">
+                    <ul>
+                        <li>${itemQ}</li>
+                    </ul>
+                </c:forEach>
+            </td>
+        </c:if>
+        <td>
+        <c:if test="${type=='EXPERIENCE'}">
+            <td>
+                <c:forEach var="itemE" items="<%=((OrganizationSection) section).getOrganizations()%>">
+                    <ul>
+                        <h4><a href="${itemE.link.url}">${itemE.link.name}</a></h4>
+                        <c:forEach var="itemSp" items="${itemE.specialisations}">
+                            ${itemSp.startDate}<br>
+                            ${itemSp.endDate}<br>
+                            <h4><a>${itemSp.title}</a></h4>
+                            ${itemSp.description}<br>
                         </c:forEach>
-                    </td>
-                </c:if>
+                    </ul>
+                </c:forEach>
             </td>
-            <td>
-                <c:if test="${type=='QUALIFICATIONS'}">
-                    <td>
-                        <c:forEach var="itemQ" items="<%=((ListSection) section).getItems()%>">
-                            <ul><li>${itemQ}</li></ul>
-                        </c:forEach>
-                    </td>
-                </c:if>
-            </td>
-            <td>
-                <c:if test="${type=='EXPERIENCE'}">
-                    <td>
-                        <c:forEach var="itemE" items="<%=((OrganizationSection) section).getOrganizations()%>">
-                            <ul>
-                                <h4><a href="${itemE.link.url}">${itemE.link.name}</a></h4>
-                                <c:forEach var="itemSp" items="${itemE.specialisations}">
-                                    ${itemSp.startDate}<br>
-                                    ${itemSp.endDate}<br>
-                                    <h4><a>${itemSp.title}</a></h4>
-                                    ${itemSp.description}<br>
-                                </c:forEach>
-                            </ul>
-                        </c:forEach>
-                    </td>
-                </c:if>
-            </td>
-                <c:if test="${type=='EDUCATION'}">
-                    <c:forEach var="itemEd" items="<%=((OrganizationSection) section).getOrganizations()%>">
-                        <ul>
-                            <h4><a href="${itemEd.link.url}">${itemEd.link.name}</a></h4>
-                            <c:forEach var="itemSp" items="${itemEd.specialisations}">
-                                ${itemSp.startDate}<br>
-                                ${itemSp.endDate}<br>
-                                <h4><a>${itemSp.title}</a></h4>
-                                ${itemSp.description}<br>
-                            </c:forEach>
-                        </ul>
+        </c:if>
+        <c:if test="${type=='EDUCATION'}">
+            <c:forEach var="itemEd" items="<%=((OrganizationSection) section).getOrganizations()%>">
+                <ul>
+                    <h4><a href="${itemEd.link.url}">${itemEd.link.name}</a></h4>
+                    <c:forEach var="itemSp" items="${itemEd.specialisations}">
+                        ${itemSp.startDate}<br>
+                        ${itemSp.endDate}<br>
+                        <h4><a>${itemSp.title}</a></h4>
+                        ${itemSp.description}<br>
                     </c:forEach>
-                </c:if>
+                </ul>
+            </c:forEach>
+        </c:if>
     </c:forEach>
 </section>
 <button type="button" onclick="window.history.back()">Назад</button>

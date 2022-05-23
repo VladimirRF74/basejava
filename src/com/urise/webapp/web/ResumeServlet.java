@@ -43,8 +43,8 @@ public class ResumeServlet extends HttpServlet {
                 for (SectionType type : SectionType.values()) {
                     if (resume.getSection(type) == null) {
                         switch (type) {
-                            case OBJECTIVE, PERSONAL -> resume.addSection(type, new TextSection("No text"));
-                            case ACHIEVEMENT, QUALIFICATIONS -> resume.addSection(type, new ListSection("No text"));
+                            case OBJECTIVE, PERSONAL -> resume.addSection(type, new TextSection(""));
+                            case ACHIEVEMENT, QUALIFICATIONS -> resume.addSection(type, new ListSection(""));
                         }
                     }
                 }
@@ -53,12 +53,12 @@ public class ResumeServlet extends HttpServlet {
                 if (uuid == null) {
                     resume = new Resume();
                     for (ContactType type : ContactType.values()) {
-                        resume.addContact(type, "No text");
+                        resume.addContact(type, "");
                     }
                     for (SectionType type : SectionType.values()) {
                         switch (type) {
-                            case OBJECTIVE, PERSONAL -> resume.addSection(type, new TextSection("No text"));
-                            case ACHIEVEMENT, QUALIFICATIONS -> resume.addSection(type, new ListSection("No text"));
+                            case OBJECTIVE, PERSONAL -> resume.addSection(type, new TextSection(""));
+                            case ACHIEVEMENT, QUALIFICATIONS -> resume.addSection(type, new ListSection(""));
                             case EDUCATION, EXPERIENCE -> resume.addSection(type, new OrganizationSection(new ArrayList<>()));
                         }
                     }
@@ -81,17 +81,17 @@ public class ResumeServlet extends HttpServlet {
         if (uuid.trim().length() != 0) {
             resume = storage.get(uuid);
             resume.setFullName(fullName);
-            doSaveUpdate(request, resume);
+            doFill(request, resume);
             storage.update(resume);
-        } else {
+        } else if (fullName.length() != 0) {
             resume = new Resume(fullName);
-            doSaveUpdate(request, resume);
+            doFill(request, resume);
             storage.save(resume);
         }
         response.sendRedirect("resume");
     }
 
-    private void doSaveUpdate(HttpServletRequest request, Resume resume) {
+    private void doFill(HttpServletRequest request, Resume resume) {
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
             if (value != null && value.trim().length() != 0) {
