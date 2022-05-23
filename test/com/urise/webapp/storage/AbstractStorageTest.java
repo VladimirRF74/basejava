@@ -57,7 +57,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() throws SQLException {
-        Resume newResume = new Resume(RESUME_2.getUuid(),"New Name");
+        Resume newResume = new Resume(RESUME_2.getUuid(), "New Name");
         newResume.addContact(ContactType.EMAIL, "mail1@google.com");
         newResume.addContact(ContactType.SKYPE, "NewSkype");
         newResume.addContact(ContactType.PHONE, "+7 921 222-22-22");

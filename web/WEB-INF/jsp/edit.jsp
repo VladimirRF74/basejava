@@ -48,12 +48,14 @@
                 </c:if>
                 <c:if test="${type=='ACHIEVEMENT'}">
                     <label>
-                        <textarea name="${type}" cols="80" rows="3"><%=String.join("\n", ((ListSection) section).getItems()).trim()%></textarea>
+                        <textarea name="${type}" cols="80"
+                                  rows="3"><%=String.join("\n", ((ListSection) section).getItems()).trim()%></textarea>
                     </label>
                 </c:if>
                 <c:if test="${type=='QUALIFICATIONS'}">
                     <label>
-                        <textarea name="${type}" cols="80" rows="3"><%=String.join("\n", ((ListSection) section).getItems()).trim()%></textarea>
+                        <textarea name="${type}" cols="80"
+                                  rows="3"><%=String.join("\n", ((ListSection) section).getItems()).trim()%></textarea>
                     </label>
                 </c:if>
                 <c:if test="${type=='EXPERIENCE'}">
@@ -67,7 +69,8 @@
                     </label>
                 </c:if>
             </c:forEach>
-        </tr><br>
+        </tr>
+        <br>
         <br>
         <button type="submit">Сохранить</button>
         <button type="button" onclick="window.history.back()">Назад</button>

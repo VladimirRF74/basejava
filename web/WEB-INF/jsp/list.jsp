@@ -11,7 +11,8 @@
 <jsp:include page="fragments/header.jsp"/>
 <div>
     <a href="resume?action=new">Create new resume</a>
-</div><br>
+</div>
+<br>
 <section>
     <table>
         <tr>
@@ -25,7 +26,8 @@
             <jsp:useBean id="resume" type="com.urise.webapp.model.Resume"></jsp:useBean>
             <tr>
                 <td><a href="resume?uuid=${resume.uuid}&action=view">${resume.fullName}</a></td>
-                <td><%=ContactType.EMAIL.toHtml(resume.getContact(ContactType.EMAIL))%></td>
+                <td><%=ContactType.EMAIL.toHtml(resume.getContact(ContactType.EMAIL))%>
+                </td>
                 <td><a href="resume?uuid=${resume.uuid}&action=delete"><img src="img/delete.png" alt="delete"></a></td>
                 <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png" alt="pencil"></a></td>
             </tr>

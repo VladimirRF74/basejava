@@ -33,6 +33,10 @@ public enum ContactType {
         this.title = title;
     }
 
+    public static String toLink(String href, String title) {
+        return "<a href='" + href + "'>" + title + "</a>";
+    }
+
     public String getTitle() {
         return title;
     }
@@ -47,9 +51,5 @@ public enum ContactType {
 
     public String toLink(String href) {
         return toLink(href, title);
-    }
-
-    public static String toLink(String href, String title) {
-        return "<a href='" + href + "'>" + title + "</a>";
     }
 }
