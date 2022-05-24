@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ResumeServlet extends HttpServlet {
     private final Storage storage = Config.get().getStorage();
@@ -45,6 +47,7 @@ public class ResumeServlet extends HttpServlet {
                         switch (type) {
                             case OBJECTIVE, PERSONAL -> resume.addSection(type, new TextSection(""));
                             case ACHIEVEMENT, QUALIFICATIONS -> resume.addSection(type, new ListSection(""));
+                            case EDUCATION, EXPERIENCE -> resume.addSection(type, new OrganizationSection(new ArrayList<>()));
                         }
                     }
                 }
@@ -94,7 +97,7 @@ public class ResumeServlet extends HttpServlet {
     private void doFill(HttpServletRequest request, Resume resume) {
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
-            if (value != null && value.trim().length() != 0) {
+            if (checkValidity(value)) {
                 resume.addContact(type, value);
             } else {
                 resume.getContacts().remove(type);
@@ -102,15 +105,30 @@ public class ResumeServlet extends HttpServlet {
         }
         for (SectionType type : SectionType.values()) {
             String value = request.getParameter(type.name().trim());
-            if (value == null || value.length() == 0) {
+            if (value == null || value.trim().isEmpty()) {
                 resume.getSections().remove(type);
             } else {
                 switch (type) {
                     case OBJECTIVE, PERSONAL -> resume.addSection(type, new TextSection(value));
-                    case ACHIEVEMENT, QUALIFICATIONS -> resume.addSection(type, new ListSection(value.split("\\n")));
+                    case ACHIEVEMENT, QUALIFICATIONS -> resume.addSection(type, new ListSection(deleteEmptyLines(value)));
                     case EDUCATION, EXPERIENCE -> resume.addSection(type, new OrganizationSection(new ArrayList<>()));
                 }
             }
         }
+    }
+
+    private List<String> deleteEmptyLines(String value) {
+        List<String> ls = new LinkedList<>();
+        String[] values = value.split("\\n");
+        for (String s : values) {
+            if (checkValidity(s)) {
+                ls.add(s);
+            }
+        }
+        return ls;
+    }
+
+    private boolean checkValidity(String s) {
+        return s != null && s.trim().length() != 0;
     }
 }

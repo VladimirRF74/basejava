@@ -33,42 +33,71 @@
         <c:set var="type" value="${sectionEntry.key}"></c:set>
         <c:set var="section" value="${sectionEntry.value}"></c:set>
         <jsp:useBean id="section" type="com.urise.webapp.model.AbstractSection"></jsp:useBean>
-
-        <th><h3><a id="type.name">${type.title}</a></h3></th>
-        <td>
-        <c:if test="${type=='OBJECTIVE'}">
-            <td>
-                <ul><a><%=((TextSection) section).getContent()%>
-                </a></ul>
-            </td>
-        </c:if>
-        <td>
-        <c:if test="${type=='PERSONAL'}">
-            <td>
-                <ul><a><%=((TextSection) section).getContent()%>
-                </a></ul>
-            </td>
-        </c:if>
-        <td>
-        <c:if test="${type=='ACHIEVEMENT'}">
-            <td>
-                <c:forEach var="itemA" items="<%=((ListSection) section).getItems()%>">
-                    <ul>
-                        <li>${itemA}</li>
-                    </ul>
-                </c:forEach>
-            </td>
-        </c:if>
-        <td>
-        <c:if test="${type=='QUALIFICATIONS'}">
-            <td>
-                <c:forEach var="itemQ" items="<%=((ListSection) section).getItems()%>">
-                    <ul>
-                        <li>${itemQ}</li>
-                    </ul>
-                </c:forEach>
-            </td>
-        </c:if>
+        <tr>
+            <th><h3><a id="type.name">${type.title}</a></h3></th>
+        </tr>
+        <c:choose>
+            <c:when test="${type=='OBJECTIVE'}">
+                <tr>
+                    <td colspan="2">
+                        <h3><%=((TextSection) section).getContent()%>
+                        </h3>
+                    </td>
+                </tr>
+            </c:when>
+            <c:when test="${type=='PERSONAL'}">
+                <tr>
+                    <td colspan="2">
+                        <%=((TextSection) section).getContent()%>
+                    </td>
+                </tr>
+            </c:when>
+            <c:when test="${type=='QUALIFICATIONS' || type=='ACHIEVEMENT'}">
+                <tr>
+                    <td colspan="2">
+                        <ul>
+                            <c:forEach var="item" items="<%=((ListSection) section).getItems()%>">
+                                <li>${item}</li>
+                            </c:forEach>
+                        </ul>
+                    </td>
+                </tr>
+            </c:when>
+        </c:choose>
+        <%--        <td>--%>
+        <%--        <c:if test="${type=='OBJECTIVE'}">--%>
+        <%--            <td>--%>
+        <%--                <ul><a><%=((TextSection) section).getContent()%>--%>
+        <%--                </a></ul>--%>
+        <%--            </td>--%>
+        <%--        </c:if>--%>
+        <%--        <td>--%>
+        <%--        <c:if test="${type=='PERSONAL'}">--%>
+        <%--            <td>--%>
+        <%--                <ul><a><%=((TextSection) section).getContent()%>--%>
+        <%--                </a></ul>--%>
+        <%--            </td>--%>
+        <%--        </c:if>--%>
+        <%--        <td>--%>
+        <%--        <c:if test="${type=='ACHIEVEMENT'}">--%>
+        <%--            <td>--%>
+        <%--                <c:forEach var="itemA" items="<%=((ListSection) section).getItems()%>">--%>
+        <%--                    <ul>--%>
+        <%--                        <li>${itemA}</li>--%>
+        <%--                    </ul>--%>
+        <%--                </c:forEach>--%>
+        <%--            </td>--%>
+        <%--        </c:if>--%>
+        <%--        <td>--%>
+        <%--        <c:if test="${type=='QUALIFICATIONS'}">--%>
+        <%--            <td>--%>
+        <%--                <c:forEach var="itemQ" items="<%=((ListSection) section).getItems()%>">--%>
+        <%--                    <ul>--%>
+        <%--                        <li>${itemQ}</li>--%>
+        <%--                    </ul>--%>
+        <%--                </c:forEach>--%>
+        <%--            </td>--%>
+        <%--        </c:if>--%>
         <td>
         <c:if test="${type=='EXPERIENCE'}">
             <td>

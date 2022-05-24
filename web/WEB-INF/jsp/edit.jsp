@@ -18,7 +18,8 @@
         <dl>
             <dt>Имя:</dt>
             <dd><label>
-                <input type="text" name="fullName" pattern="[a-zA-Zа-яёА-ЯЁ].{2,}" title="2 или более символов" size=50 value="${resume.fullName}" required>
+                <input type="text" name="fullName" pattern="[a-zA-Zа-яёА-ЯЁ].{2,}" title="2 или более символов" size=50
+                       value="${resume.fullName}" required>
             </label></dd>
         </dl>
         <h3>Контакты:</h3>
@@ -36,28 +37,15 @@
                 <c:set var="section" value="${resume.getSection(type)}"></c:set>
                 <jsp:useBean id="section" type="com.urise.webapp.model.AbstractSection"></jsp:useBean>
                 <h3><a>${type.title}</a></h3>
-                <c:if test="${type=='OBJECTIVE'}">
-                    <label>
-                        <textarea name="${type}" cols="80" rows="3"><%=section.toString().trim()%></textarea>
-                    </label>
-                </c:if>
-                <c:if test="${type=='PERSONAL'}">
-                    <label>
-                        <textarea name="${type}" cols="80" rows="3"><%=section.toString().trim()%></textarea>
-                    </label>
-                </c:if>
-                <c:if test="${type=='ACHIEVEMENT'}">
-                    <label>
-                        <textarea name="${type}" cols="80"
-                                  rows="3"><%=String.join("\n", ((ListSection) section).getItems()).trim()%></textarea>
-                    </label>
-                </c:if>
-                <c:if test="${type=='QUALIFICATIONS'}">
-                    <label>
-                        <textarea name="${type}" cols="80"
-                                  rows="3"><%=String.join("\n", ((ListSection) section).getItems()).trim()%></textarea>
-                    </label>
-                </c:if>
+                <c:choose>
+                    <c:when test="${type=='PERSONAL' || type=='OBJECTIVE'}">
+                        <textarea name='${type}' cols=75 rows=3><%=section%></textarea>
+                    </c:when>
+                    <c:when test="${type=='QUALIFICATIONS' || type=='ACHIEVEMENT'}">
+                        <textarea name='${type}' cols=75
+                                  rows=3><%=String.join("\n", ((ListSection) section).getItems())%></textarea>
+                    </c:when>
+                </c:choose>
                 <c:if test="${type=='EXPERIENCE'}">
                     <label>
                         <textarea name="${type}" cols="80" rows="3"><%=section%></textarea>
