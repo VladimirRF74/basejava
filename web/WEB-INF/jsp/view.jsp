@@ -2,6 +2,7 @@
 <%@ page import="com.urise.webapp.model.TextSection" %>
 <%@ page import="com.urise.webapp.model.ListSection" %>
 <%@ page import="com.urise.webapp.model.OrganizationSection" %>
+<%@ page import="com.urise.webapp.util.DateUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -40,8 +41,7 @@
             <c:when test="${type=='OBJECTIVE'}">
                 <tr>
                     <td colspan="2">
-                        <h3><%=((TextSection) section).getContent()%>
-                        </h3>
+                        <%=((TextSection) section).getContent()%>
                     </td>
                 </tr>
             </c:when>
@@ -63,70 +63,21 @@
                     </td>
                 </tr>
             </c:when>
-        </c:choose>
-        <%--        <td>--%>
-        <%--        <c:if test="${type=='OBJECTIVE'}">--%>
-        <%--            <td>--%>
-        <%--                <ul><a><%=((TextSection) section).getContent()%>--%>
-        <%--                </a></ul>--%>
-        <%--            </td>--%>
-        <%--        </c:if>--%>
-        <%--        <td>--%>
-        <%--        <c:if test="${type=='PERSONAL'}">--%>
-        <%--            <td>--%>
-        <%--                <ul><a><%=((TextSection) section).getContent()%>--%>
-        <%--                </a></ul>--%>
-        <%--            </td>--%>
-        <%--        </c:if>--%>
-        <%--        <td>--%>
-        <%--        <c:if test="${type=='ACHIEVEMENT'}">--%>
-        <%--            <td>--%>
-        <%--                <c:forEach var="itemA" items="<%=((ListSection) section).getItems()%>">--%>
-        <%--                    <ul>--%>
-        <%--                        <li>${itemA}</li>--%>
-        <%--                    </ul>--%>
-        <%--                </c:forEach>--%>
-        <%--            </td>--%>
-        <%--        </c:if>--%>
-        <%--        <td>--%>
-        <%--        <c:if test="${type=='QUALIFICATIONS'}">--%>
-        <%--            <td>--%>
-        <%--                <c:forEach var="itemQ" items="<%=((ListSection) section).getItems()%>">--%>
-        <%--                    <ul>--%>
-        <%--                        <li>${itemQ}</li>--%>
-        <%--                    </ul>--%>
-        <%--                </c:forEach>--%>
-        <%--            </td>--%>
-        <%--        </c:if>--%>
-        <td>
-        <c:if test="${type=='EXPERIENCE'}">
-            <td>
-                <c:forEach var="itemE" items="<%=((OrganizationSection) section).getOrganizations()%>">
-                    <ul>
-                        <h4><a href="${itemE.link.url}">${itemE.link.name}</a></h4>
-                        <c:forEach var="itemSp" items="${itemE.specialisations}">
-                            ${itemSp.startDate}<br>
-                            ${itemSp.endDate}<br>
-                            <h4><a>${itemSp.title}</a></h4>
-                            ${itemSp.description}<br>
-                        </c:forEach>
-                    </ul>
-                </c:forEach>
-            </td>
-        </c:if>
-        <c:if test="${type=='EDUCATION'}">
-            <c:forEach var="itemEd" items="<%=((OrganizationSection) section).getOrganizations()%>">
-                <ul>
-                    <h4><a href="${itemEd.link.url}">${itemEd.link.name}</a></h4>
-                    <c:forEach var="itemSp" items="${itemEd.specialisations}">
-                        ${itemSp.startDate}<br>
-                        ${itemSp.endDate}<br>
-                        <h4><a>${itemSp.title}</a></h4>
-                        ${itemSp.description}<br>
+            <c:when test="${type=='EXPERIENCE' || type=='EDUCATION'}">
+                <dl>
+                    <c:forEach var="itemE" items="<%=((OrganizationSection) section).getOrganizations()%>">
+                            <dt><h3><a href="${itemE.link.url}">${itemE.link.name}</a></h3></dt>
+                            <c:forEach var="itemSp" items="${itemE.specialisations}">
+                                <jsp:useBean id="itemSp" type="com.urise.webapp.model.Organization.Specialisation"/>
+                                <dd><%=DateUtil.format(itemSp.getStartDate())%></dd>
+                                <dd><%=DateUtil.format(itemSp.getEndDate())%></dd>
+                                <dt><h4><a>${itemSp.title}</a></h4></dt>
+                                <dd>${itemSp.description}</dd>
+                            </c:forEach>
                     </c:forEach>
-                </ul>
-            </c:forEach>
-        </c:if>
+                </dl>
+            </c:when>
+        </c:choose>
     </c:forEach>
 </section>
 <button type="button" onclick="window.history.back()">Назад</button>

@@ -3,6 +3,7 @@ package com.urise.webapp.web;
 import com.urise.webapp.Config;
 import com.urise.webapp.model.*;
 import com.urise.webapp.storage.Storage;
+import com.urise.webapp.util.DateUtil;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -42,15 +43,7 @@ public class ResumeServlet extends HttpServlet {
                 break;
             case "edit":
                 resume = storage.get(uuid);
-                for (SectionType type : SectionType.values()) {
-                    if (resume.getSection(type) == null) {
-                        switch (type) {
-                            case OBJECTIVE, PERSONAL -> resume.addSection(type, new TextSection(""));
-                            case ACHIEVEMENT, QUALIFICATIONS -> resume.addSection(type, new ListSection(""));
-                            case EDUCATION, EXPERIENCE -> resume.addSection(type, new OrganizationSection(new ArrayList<>()));
-                        }
-                    }
-                }
+                showEmptyForm(resume);
                 break;
             case "new":
                 if (uuid == null) {
@@ -58,13 +51,7 @@ public class ResumeServlet extends HttpServlet {
                     for (ContactType type : ContactType.values()) {
                         resume.addContact(type, "");
                     }
-                    for (SectionType type : SectionType.values()) {
-                        switch (type) {
-                            case OBJECTIVE, PERSONAL -> resume.addSection(type, new TextSection(""));
-                            case ACHIEVEMENT, QUALIFICATIONS -> resume.addSection(type, new ListSection(""));
-                            case EDUCATION, EXPERIENCE -> resume.addSection(type, new OrganizationSection(new ArrayList<>()));
-                        }
-                    }
+                    showEmptyForm(resume);
                 }
                 break;
             default:
@@ -72,6 +59,22 @@ public class ResumeServlet extends HttpServlet {
         }
         request.setAttribute("resume", resume);
         request.getRequestDispatcher(("view".equals(action) ? "/WEB-INF/jsp/view.jsp" : "/WEB-INF/jsp/edit.jsp")).forward(request, response);
+    }
+
+    private void showEmptyForm(Resume resume) {
+        List<Organization> listOrg = new ArrayList<>();
+        for (SectionType type : SectionType.values()) {
+            if (resume.getSection(type) == null) {
+                switch (type) {
+                    case OBJECTIVE, PERSONAL -> resume.addSection(type, new TextSection(""));
+                    case ACHIEVEMENT, QUALIFICATIONS -> resume.addSection(type, new ListSection(""));
+                    case EDUCATION, EXPERIENCE -> {
+                        listOrg.add(new Organization("", "", new Organization.Specialisation()));
+                        resume.addSection(type, new OrganizationSection(listOrg));
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -111,7 +114,20 @@ public class ResumeServlet extends HttpServlet {
                 switch (type) {
                     case OBJECTIVE, PERSONAL -> resume.addSection(type, new TextSection(value));
                     case ACHIEVEMENT, QUALIFICATIONS -> resume.addSection(type, new ListSection(deleteEmptyLines(value)));
-                    case EDUCATION, EXPERIENCE -> resume.addSection(type, new OrganizationSection(new ArrayList<>()));
+                    case EDUCATION, EXPERIENCE -> {
+                        List<Organization> listOrg = new ArrayList<>();
+                        String name = request.getParameter(type.name());
+                        String url = request.getParameter(type.name() + "url");
+                        String startDate = request.getParameter(type.name() + "startDate");
+                        String endDate = request.getParameter(type.name() + "endDate");
+                        String title = request.getParameter(type.name() + "title");
+                        String description = request.getParameter(type.name() + "description");
+                        listOrg.add(new Organization(name, url,
+                                new Organization.Specialisation(DateUtil.of(DateUtil.getYear(startDate), DateUtil.getMonth(startDate)),
+                                        DateUtil.of(DateUtil.getYear(endDate), DateUtil.getMonth(endDate)),
+                                        title, description)));
+                        resume.addSection(type, new OrganizationSection(listOrg));
+                    }
                 }
             }
         }
