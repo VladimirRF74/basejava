@@ -14,7 +14,7 @@
 </div>
 <br>
 <section>
-    <table>
+    <table class="list">
         <tr>
             <th>Имя</th>
             <th>Email</th>
@@ -25,11 +25,11 @@
         <c:forEach items="${resumes}" var="resume">
             <jsp:useBean id="resume" type="com.urise.webapp.model.Resume"></jsp:useBean>
             <tr>
-                <td><a href="resume?uuid=${resume.uuid}&action=view">${resume.fullName}</a></td>
-                <td><%=ContactType.EMAIL.toHtml(resume.getContact(ContactType.EMAIL))%>
+                <td class="c1"><a href="resume?uuid=${resume.uuid}&action=view">${resume.fullName}</a></td>
+                <td class="c1" style="text-align:center"><%=ContactType.EMAIL.toHtml(resume.getContact(ContactType.EMAIL))%>
                 </td>
-                <td><a href="resume?uuid=${resume.uuid}&action=delete"><img src="img/delete.png" alt="delete"></a></td>
-                <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png" alt="pencil"></a></td>
+                <td class="c2" style="text-align:center"><a href="resume?uuid=${resume.uuid}&action=delete"><img src="img/delete.png" alt="delete"></a></td>
+                <td class="c2" style="text-align:center"><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png" alt="pencil"></a></td>
             </tr>
         </c:forEach>
     </table>

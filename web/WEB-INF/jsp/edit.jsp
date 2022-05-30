@@ -41,13 +41,18 @@
             <h3><a>${type.title}</a></h3>
             <c:choose>
                 <c:when test="${type=='PERSONAL' || type=='OBJECTIVE'}">
-                    <textarea name='${type}' cols=75 rows=3><%=section%></textarea>
+                    <label>
+                        <textarea name='${type}' cols=75 rows=3><%=section%></textarea>
+                    </label>
                 </c:when>
                 <c:when test="${type=='QUALIFICATIONS' || type=='ACHIEVEMENT'}">
-                    <textarea name='${type}' cols=75 rows=3><%=String.join("\n", ((ListSection) section).getItems())%></textarea>
+                    <label>
+                        <textarea name='${type}' cols=75 rows=3><%=String.join("\n", ((ListSection) section).getItems())%></textarea>
+                    </label>
                 </c:when>
             <c:when test="${type=='EXPERIENCE' || type=='EDUCATION'}">
-                <c:forEach var="org" items="<%=((OrganizationSection) section).getOrganizations()%>">
+                <c:forEach var="org" items="<%=((OrganizationSection) section).getOrganizations()%>"
+                           varStatus="counter">
                     <dl>
                         <dt>Название учереждения:</dt>
                         <dd><input type="text" name='${type}' size=100 value="${org.link.name}"></dd>
@@ -55,27 +60,33 @@
                     <dl>
                         <dt>Сайт учереждения:</dt>
                         <dd><input type="text" name='${type}url' size=100 value="${org.link.url}"></dd>
-                        </dd>
                     </dl>
                     <br>
-                    <div>
-                        <c:forEach var="itemSp" items="${org.specialisations}">
-                            <jsp:useBean id="itemSp" type="com.urise.webapp.model.Organization.Specialisation"/>
+                    <div style="margin-left: 30px">
+                        <c:forEach var="pos" items="${org.specialisations}">
+                            <jsp:useBean id="pos" type="com.urise.webapp.model.Organization.Specialisation"/>
                             <dl>
                                 <dt>Начальная дата:</dt>
-                                <dd><input type="text" name="${type}startDate" size=10 value="<%=DateUtil.format(itemSp.getStartDate())%>" placeholder="MM/yyyy"></dd>
+                                <dd>
+                                    <input type="text" pattern="[0-9]{2}\/[0-9]{4}" name="${type}${counter.index}startDate" size=10
+                                           value="<%=DateUtil.format(pos.getStartDate())%>" placeholder="MM/yyyy">
+                                </dd>
                             </dl>
                             <dl>
                                 <dt>Конечная дата:</dt>
-                                <dd><input type="text" name="${type}endDate" size=10 value="<%=DateUtil.format(itemSp.getEndDate())%>" placeholder="MM/yyyy"></dd>
+                                <dd>
+                                    <input type="text" pattern="[0-9]{2}\/[0-9]{4}" name="${type}${counter.index}endDate" size=10
+                                           value="<%=DateUtil.format(pos.getEndDate())%>" placeholder="MM/yyyy">
                             </dl>
                             <dl>
                                 <dt>Должность:</dt>
-                                <dd><input type="text" name='${type}title' size=75 value="${itemSp.title}"></dd>
+                                <dd><input type="text" name='${type}${counter.index}title' size=75
+                                           value="${pos.title}">
                             </dl>
                             <dl>
                                 <dt>Описание:</dt>
-                                <dd><textarea name="${type}description" rows=5 cols=75>${itemSp.description}</textarea></dd>
+                                <dd><textarea name="${type}${counter.index}description" rows=5
+                                              cols=75>${pos.description}</textarea></dd>
                             </dl>
                         </c:forEach>
                     </div>

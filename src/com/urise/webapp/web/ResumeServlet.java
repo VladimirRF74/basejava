@@ -43,7 +43,39 @@ public class ResumeServlet extends HttpServlet {
                 break;
             case "edit":
                 resume = storage.get(uuid);
-                showEmptyForm(resume);
+                for (SectionType type : SectionType.values()) {
+                    AbstractSection section = resume.getSection(type);
+                    switch (type) {
+                        case OBJECTIVE:
+                        case PERSONAL:
+                            if (section == null) {
+                                section = new TextSection("");
+                            }
+                            break;
+                        case ACHIEVEMENT:
+                        case QUALIFICATIONS:
+                            if (section == null) {
+                                section = new ListSection("");
+                            }
+                            break;
+                        case EXPERIENCE:
+                        case EDUCATION:
+                            OrganizationSection orgSection = (OrganizationSection) section;
+                            List<Organization> emptyFirstOrganizations = new ArrayList<>();
+                            emptyFirstOrganizations.add(new Organization("", "", new Organization.Specialisation()));
+                            if (orgSection != null) {
+                                for (Organization org : orgSection.getOrganizations()) {
+                                    List<Organization.Specialisation> emptyFirstPositions = new ArrayList<>();
+                                    emptyFirstPositions.add(new Organization.Specialisation());
+                                    emptyFirstPositions.addAll(org.getSpecialisations());
+                                    emptyFirstOrganizations.add(new Organization(org.getLink(), emptyFirstPositions));
+                                }
+                            }
+                            section = new OrganizationSection(emptyFirstOrganizations);
+                            break;
+                    }
+                    resume.addSection(type, section);
+                }
                 break;
             case "new":
                 if (uuid == null) {
@@ -108,24 +140,37 @@ public class ResumeServlet extends HttpServlet {
         }
         for (SectionType type : SectionType.values()) {
             String value = request.getParameter(type.name().trim());
-            if (value == null || value.trim().isEmpty()) {
+            String[] values = request.getParameterValues(type.name().trim());
+            if ((value == null || value.isEmpty()) && values.length < 2) {
                 resume.getSections().remove(type);
             } else {
                 switch (type) {
                     case OBJECTIVE, PERSONAL -> resume.addSection(type, new TextSection(value));
-                    case ACHIEVEMENT, QUALIFICATIONS -> resume.addSection(type, new ListSection(deleteEmptyLines(value)));
+                    case ACHIEVEMENT, QUALIFICATIONS -> {
+                        assert value != null;
+                        resume.addSection(type, new ListSection(deleteEmptyLines(value)));
+                    }
                     case EDUCATION, EXPERIENCE -> {
                         List<Organization> listOrg = new ArrayList<>();
-                        String name = request.getParameter(type.name());
-                        String url = request.getParameter(type.name() + "url");
-                        String startDate = request.getParameter(type.name() + "startDate");
-                        String endDate = request.getParameter(type.name() + "endDate");
-                        String title = request.getParameter(type.name() + "title");
-                        String description = request.getParameter(type.name() + "description");
-                        listOrg.add(new Organization(name, url,
-                                new Organization.Specialisation(DateUtil.of(DateUtil.getYear(startDate), DateUtil.getMonth(startDate)),
-                                        DateUtil.of(DateUtil.getYear(endDate), DateUtil.getMonth(endDate)),
-                                        title, description)));
+                        String[] urls = request.getParameterValues(type.name() + "url");
+                        for (int i = 0; i < values.length; i++) {
+                            String name = values[i];
+                            if (checkValidity(name)) {
+                                List<Organization.Specialisation> positions = new ArrayList<>();
+                                String pfx = type.name() + i;
+                                String[] startDates = request.getParameterValues(pfx + "startDate");
+                                String[] endDates = request.getParameterValues(pfx + "endDate");
+                                String[] titles = request.getParameterValues(pfx + "title");
+                                String[] descriptions = request.getParameterValues(pfx + "description");
+                                for (int j = 0; j < titles.length; j++) {
+                                    if (checkValidity(titles[j])) {
+                                        positions.add(new Organization.Specialisation(DateUtil.parse(startDates[j]), DateUtil.parse(endDates[j]),
+                                                titles[j], descriptions[j]));
+                                    }
+                                }
+                                listOrg.add(new Organization(new Link(name, urls[i]), positions));
+                            }
+                        }
                         resume.addSection(type, new OrganizationSection(listOrg));
                     }
                 }
