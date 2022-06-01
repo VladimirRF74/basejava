@@ -11,7 +11,7 @@ public enum ContactType {
     EMAIL("Почта") {
         @Override
         public String toHtml0(String value) {
-            return getTitle() + ": " + toLink("mailto:" + value, value);
+            return toLink("mailto:" + value, value);
         }
     },
     GITHUB("Профиль GITHUB") {
@@ -34,7 +34,7 @@ public enum ContactType {
     }
 
     public static String toLink(String href, String title) {
-        return "<a href='" + href + "'>" + title + "</a>";
+        return "<a class=\"contact-link\" href='" + href + "'>" + title + "</a>";
     }
 
     public String getTitle() {

@@ -11,22 +11,30 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class ResumeServlet extends HttpServlet {
-    private final Storage storage = Config.get().getStorage();
+    private enum THEME {
+        dark, light
+    }
+    private Storage storage;
+    private final Set<String> themes = new HashSet<>();
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+        storage = Config.get().getStorage();
+        for (THEME t : THEME.values()) {
+            themes.add(t.name());
+        }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String uuid = request.getParameter("uuid");
         String action = request.getParameter("action");
+        request.setAttribute("theme", getTheme(request));
+
         if (action == null) {
             request.setAttribute("resumes", storage.getAllSorted());
             request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
@@ -35,8 +43,11 @@ public class ResumeServlet extends HttpServlet {
         Resume resume = null;
         switch (action) {
             case "delete":
+                Config.get().checkImmutable(uuid);
                 storage.delete(uuid);
-                response.sendRedirect("resume");
+                request.setAttribute("theme", getTheme(request));
+                request.setAttribute("resumes", storage.getAllSorted());
+                request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
                 return;
             case "view":
                 resume = storage.get(uuid);
@@ -77,7 +88,7 @@ public class ResumeServlet extends HttpServlet {
                     resume.addSection(type, section);
                 }
                 break;
-            case "new":
+            case "add":
                 if (uuid == null) {
                     resume = new Resume();
                     for (ContactType type : ContactType.values()) {
@@ -110,13 +121,14 @@ public class ResumeServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName").trim();
         Resume resume;
         assert uuid != null;
         if (uuid.trim().length() != 0) {
+            Config.get().checkImmutable(uuid);
             resume = storage.get(uuid);
             resume.setFullName(fullName);
             doFill(request, resume);
@@ -126,7 +138,9 @@ public class ResumeServlet extends HttpServlet {
             doFill(request, resume);
             storage.save(resume);
         }
-        response.sendRedirect("resume");
+        request.setAttribute("theme", getTheme(request));
+        request.setAttribute("resumes", storage.getAllSorted());
+        request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
     }
 
     private void doFill(HttpServletRequest request, Resume resume) {
@@ -191,5 +205,10 @@ public class ResumeServlet extends HttpServlet {
 
     private boolean checkValidity(String s) {
         return s != null && s.trim().length() != 0;
+    }
+
+    private String getTheme(HttpServletRequest request) {
+        String theme = request.getParameter("theme");
+        return themes.contains(theme) ? theme : THEME.light.name();
     }
 }
